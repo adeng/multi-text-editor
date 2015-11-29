@@ -107,7 +107,7 @@ public class MainPage extends javax.swing.JFrame {
                 .addContainerGap(110, Short.MAX_VALUE))
         );
 
-        jMenu1.setText("Connections");
+        jMenu1.setText("Connect");
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Help");
@@ -157,7 +157,7 @@ public class MainPage extends javax.swing.JFrame {
         panel.add(textBox);
         frame.setContentPane(panel); */
         
-        Main main = new Main();
+        EditorPage main = new EditorPage();
         main.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
