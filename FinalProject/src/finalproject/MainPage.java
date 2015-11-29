@@ -128,7 +128,7 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentAdded
 
     private void onlineStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onlineStartActionPerformed
-        this.setVisible(false);
+        this.setVisible(true);
         try {
             net = new NetworkInfo(true);
             net.setVisible(true);

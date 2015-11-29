@@ -5,8 +5,18 @@
  */
 package finalproject;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -41,12 +51,12 @@ public class NetworkInfo extends javax.swing.JFrame {
             }
             
             ipField.setEditable(false);
-            passField.setText(Integer.toString(pass));
-            passField.setEditable(false);
+            //passField.setText(Integer.toString(pass));
+            //passField.setEditable(false);
         } else {
             actionButton.setText("Connect to Session");
             ipField.setText("");
-            passField.setText("");
+            //passField.setText("");
             portField.setText("");
         }
     }
@@ -63,20 +73,26 @@ public class NetworkInfo extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         ipField = new javax.swing.JTextField();
-        passField = new javax.swing.JTextField();
         actionButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         portField = new javax.swing.JTextField();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jPasswordField1 = new javax.swing.JPasswordField();
 
         jLabel1.setText("IP Address");
 
         jLabel2.setText("Password");
 
-        ipField.setText("jTextField1");
-
-        passField.setText("jTextField2");
+        ipField.setText("Click here to show your IP");
+        ipField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ipFieldMouseClicked(evt);
+            }
+        });
+        ipField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ipFieldActionPerformed(evt);
+            }
+        });
 
         actionButton.setText("Start");
         actionButton.addActionListener(new java.awt.event.ActionListener() {
@@ -88,6 +104,18 @@ public class NetworkInfo extends javax.swing.JFrame {
         jLabel3.setText("Port");
 
         portField.setText("9286");
+
+        jPasswordField1.setText("jPasswordField1");
+        jPasswordField1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPasswordField1MouseClicked(evt);
+            }
+        });
+        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordField1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -106,7 +134,9 @@ public class NetworkInfo extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(ipField, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                             .addComponent(portField)
-                            .addComponent(passField))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -123,7 +153,7 @@ public class NetworkInfo extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(passField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40)
                 .addComponent(actionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -132,14 +162,25 @@ public class NetworkInfo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public String passInput = "pic20a";
+    private Boolean testPassword = false;
+    
+    
     private void actionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actionButtonActionPerformed
         NetworkHandler nh;
-        this.setVisible(false);
+        //this.setVisible(false);
+              
+        if (testPassword == true){
+            this.setVisible(true);
+            EditorPage ep = new EditorPage();
+            ep.setVisible(true);
+        }
+        else {
+        JOptionPane.showMessageDialog(null, "Please enter the password first");
+      }
         
-        EditorPage ep = new EditorPage();
-        ep.setVisible(true);
         
-        try {
+        /*try {
             if( host ) {
                 nh = new NetworkHandler(Integer.parseInt(portField.getText()), 
                         Integer.parseInt(passField.getText()));
@@ -153,9 +194,49 @@ public class NetworkInfo extends javax.swing.JFrame {
         } catch ( Exception ex ) {
             System.out.println("Something went wrong :(");
             ex.printStackTrace();
-        }
+        }*/
         
     }//GEN-LAST:event_actionButtonActionPerformed
+
+    private void ipFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ipFieldActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_ipFieldActionPerformed
+
+    private void ipFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ipFieldMouseClicked
+        // TODO add your handling code here:
+        InetAddress addr;
+        String ip = "";
+        try {
+            addr = InetAddress.getLocalHost();
+            ip = addr.getHostAddress();
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        ipField.setText(ip);
+    }//GEN-LAST:event_ipFieldMouseClicked
+
+    private void jPasswordField1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPasswordField1MouseClicked
+        // TODO add your handling code here:
+        jPasswordField1.setText("");
+    }//GEN-LAST:event_jPasswordField1MouseClicked
+
+    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+        // TODO add your handling code here:
+        jPasswordField1.setEchoChar('*');
+        JPasswordField input = (JPasswordField) evt.getSource();
+        char[] pass = input.getPassword();
+        String pass1 = new String (pass);
+        
+        if (pass1.equals(passInput)){
+            JOptionPane.showMessageDialog(null, "Thank you! Now you can start!");
+            testPassword = true;
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Password is not correct");
+    }
+    }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,7 +280,7 @@ public class NetworkInfo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField passField;
+    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField portField;
     // End of variables declaration//GEN-END:variables
 }
