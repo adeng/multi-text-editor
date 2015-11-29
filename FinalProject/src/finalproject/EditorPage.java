@@ -5,6 +5,12 @@
  */
 package finalproject;
 
+import java.util.*;
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.net.*;
+
 /**
  *
  * @author alber
@@ -28,7 +34,7 @@ public class EditorPage extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        textArea = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -47,9 +53,9 @@ public class EditorPage extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        textArea.setColumns(20);
+        textArea.setRows(5);
+        jScrollPane2.setViewportView(textArea);
 
         jLabel1.setText("You are currently in OFFLINE mode.");
 
@@ -80,6 +86,11 @@ public class EditorPage extends javax.swing.JFrame {
         jMenu2.setText("Edit");
 
         jMenuItem4.setText("Copy");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem4);
 
         jMenuItem3.setText("Cut");
@@ -141,6 +152,10 @@ public class EditorPage extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu3ActionPerformed
 
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -159,6 +174,6 @@ public class EditorPage extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea textArea;
     // End of variables declaration//GEN-END:variables
 }
