@@ -17,45 +17,19 @@ import java.net.*;
  */
 public class EditorPage extends javax.swing.JFrame {
 
-    private ServerSocket sSock;
-    private Socket sock;
-    private boolean auth;
-    private int pass;
+    private NetworkHandler network;
     
     /**
      * Creates new form Main
      */
     public EditorPage() {
         initComponents();
-        auth = true;
     }
     
-    public EditorPage(int port, int pass) throws IOException {
-        initComponents();
-        auth = false;
-        this.pass = pass;
-        
-        sSock = new ServerSocket(port);
-        sock = sSock.accept();
+    public void setNetwork( NetworkHandler nh ) {
+        network = nh;
     }
     
-    public EditorPage(String ip, int port, int pass) throws IOException {
-        initComponents();
-        auth = false;
-        this.pass = pass;
-        
-        sock = new Socket(ip, port);
-    }
-    
-    public boolean sendAuth(int pass) throws IOException {
-        OutputStream os = sock.getOutputStream();
-        OutputStreamWriter osw = new OutputStreamWriter(os);
-        BufferedWriter bw = new BufferedWriter(osw);
-        bw.write(pass);
-        bw.close();
-        
-        
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.

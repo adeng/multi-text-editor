@@ -28,6 +28,7 @@ public class NetworkInfo extends javax.swing.JFrame {
         this.host = host;
         
         if( host ) {
+            actionButton.setText("Host Session");
             pass = (int) (Math.round(Math.random() * 99999) + 
                     100000*Math.floor(Math.random()*9 + 1));
             
@@ -43,6 +44,7 @@ public class NetworkInfo extends javax.swing.JFrame {
             passField.setText(Integer.toString(pass));
             passField.setEditable(false);
         } else {
+            actionButton.setText("Connect to Session");
             ipField.setText("");
             passField.setText("");
             portField.setText("");
@@ -62,7 +64,7 @@ public class NetworkInfo extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         ipField = new javax.swing.JTextField();
         passField = new javax.swing.JTextField();
-        label = new javax.swing.JButton();
+        actionButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         portField = new javax.swing.JTextField();
 
@@ -76,7 +78,12 @@ public class NetworkInfo extends javax.swing.JFrame {
 
         passField.setText("jTextField2");
 
-        label.setText("Start");
+        actionButton.setText("Start");
+        actionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actionButtonActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Port");
 
@@ -89,7 +96,7 @@ public class NetworkInfo extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(actionButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -118,12 +125,37 @@ public class NetworkInfo extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(passField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40)
-                .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(actionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void actionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actionButtonActionPerformed
+        NetworkHandler nh;
+        this.setVisible(false);
+        
+        EditorPage ep = new EditorPage();
+        ep.setVisible(true);
+        
+        try {
+            if( host ) {
+                nh = new NetworkHandler(Integer.parseInt(portField.getText()), 
+                        Integer.parseInt(passField.getText()));
+            } else {
+                nh = new NetworkHandler(ipField.getText(), 
+                        Integer.parseInt(portField.getText()), 
+                        Integer.parseInt(passField.getText()));
+            }
+            
+            ep.setNetwork(nh);
+        } catch ( Exception ex ) {
+            System.out.println("Something went wrong :(");
+            ex.printStackTrace();
+        }
+        
+    }//GEN-LAST:event_actionButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -162,11 +194,11 @@ public class NetworkInfo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton actionButton;
     private javax.swing.JTextField ipField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JButton label;
     private javax.swing.JTextField passField;
     private javax.swing.JTextField portField;
     // End of variables declaration//GEN-END:variables
