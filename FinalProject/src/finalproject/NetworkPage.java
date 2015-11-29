@@ -7,23 +7,26 @@ package finalproject;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  *
  * @author alber
  */
-public class NetworkInfo extends javax.swing.JFrame {
+public class NetworkPage extends javax.swing.JFrame {
     private boolean host;
     private int pass;
     
     /**
      * Creates new form HostStart
      */
-    public NetworkInfo() {
+    public NetworkPage() {
         initComponents();
     }
     
-    public NetworkInfo( boolean host ) {
+    public NetworkPage( boolean host ) {
         this();
         this.host = host;
         
@@ -133,7 +136,33 @@ public class NetworkInfo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void actionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actionButtonActionPerformed
-        NetworkHandler nh;
+        NetworkHandlerThread nh;
+        String ip = ipField.getText();
+        int port = Integer.parseInt(portField.getText());
+        int pass = Integer.parseInt(passField.getText());
+        
+        final ExecutorService service;
+        final Future<Boolean>  task;
+
+        service = Executors.newFixedThreadPool(1);
+        try {
+            final boolean auth;
+            
+            if( host ) {
+                task = service.submit(new AuthHandlerThread(port, pass));
+            } else {
+                task = service.submit(new AuthHandlerThread(ip, port, pass));
+            }
+            
+            auth = task.get();
+            System.out.println(auth);
+            service.shutdownNow();
+            
+        } catch (Exception ex) {
+            System.out.println("Something went wrong :(");
+            ex.printStackTrace();
+        }
+        
         this.setVisible(false);
         
         EditorPage ep = new EditorPage();
@@ -141,10 +170,10 @@ public class NetworkInfo extends javax.swing.JFrame {
         
         try {
             if( host ) {
-                nh = new NetworkHandler(Integer.parseInt(portField.getText()), 
+                nh = new NetworkHandlerThread(Integer.parseInt(portField.getText()), 
                         Integer.parseInt(passField.getText()));
             } else {
-                nh = new NetworkHandler(ipField.getText(), 
+                nh = new NetworkHandlerThread(ipField.getText(), 
                         Integer.parseInt(portField.getText()), 
                         Integer.parseInt(passField.getText()));
             }
@@ -174,21 +203,23 @@ public class NetworkInfo extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NetworkInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NetworkPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NetworkInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NetworkPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NetworkInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NetworkPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NetworkInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NetworkPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NetworkInfo().setVisible(true);
+                new NetworkPage().setVisible(true);
             }
         });
     }

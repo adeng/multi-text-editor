@@ -17,7 +17,7 @@ import java.net.*;
  */
 public class EditorPage extends javax.swing.JFrame {
 
-    private NetworkHandler network;
+    private NetworkHandlerThread network;
     
     /**
      * Creates new form Main
@@ -26,7 +26,7 @@ public class EditorPage extends javax.swing.JFrame {
         initComponents();
     }
     
-    public void setNetwork( NetworkHandler nh ) {
+    public void setNetwork( NetworkHandlerThread nh ) {
         network = nh;
     }
     

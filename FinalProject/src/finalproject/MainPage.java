@@ -16,7 +16,7 @@ import javax.swing.*;
  * @author ManYeeYu
  */
 public class MainPage extends javax.swing.JFrame {
-    private NetworkInfo net;
+    private NetworkPage net;
     
     /**
      * Creates new form MainPage
@@ -130,7 +130,7 @@ public class MainPage extends javax.swing.JFrame {
     private void onlineStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onlineStartActionPerformed
         this.setVisible(false);
         try {
-            net = new NetworkInfo(true);
+            net = new NetworkPage(true);
             net.setVisible(true);
         } catch (Exception ex) {
             System.out.println("Something went wrong :(");
@@ -149,7 +149,7 @@ public class MainPage extends javax.swing.JFrame {
     private void connectStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectStartActionPerformed
         this.setVisible(false);
         try {
-            net = new NetworkInfo(false);
+            net = new NetworkPage(false);
             net.setVisible(true);
         } catch (Exception ex) {
             System.out.println("Something went wrong :(");
