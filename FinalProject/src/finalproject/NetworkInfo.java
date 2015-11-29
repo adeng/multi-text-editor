@@ -6,7 +6,7 @@
 package finalproject;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.InetAddress;
 
 /**
  *
@@ -14,7 +14,6 @@ import java.net.*;
  */
 public class NetworkInfo extends javax.swing.JFrame {
     private boolean host;
-    private ServerSocket sock;
     private int pass;
     
     /**
@@ -24,22 +23,29 @@ public class NetworkInfo extends javax.swing.JFrame {
         initComponents();
     }
     
-    public NetworkInfo( boolean host ) throws Exception {
+    public NetworkInfo( boolean host ) {
         this();
         this.host = host;
-        sock = new ServerSocket(9286);
         
         if( host ) {
             pass = (int) (Math.round(Math.random() * 99999) + 
                     100000*Math.floor(Math.random()*9 + 1));
             
-            ipField.setText(sock.getInetAddress().toString());
+            try {
+                InetAddress ip = InetAddress.getLocalHost();
+                ipField.setText(ip.getHostAddress());
+            } catch (Exception ex) {
+                ipField.setText("Error! Something went wrong");
+                ex.printStackTrace();
+            }
+            
             ipField.setEditable(false);
             passField.setText(Integer.toString(pass));
             passField.setEditable(false);
         } else {
             ipField.setText("");
             passField.setText("");
+            portField.setText("");
         }
     }
 
@@ -57,6 +63,8 @@ public class NetworkInfo extends javax.swing.JFrame {
         ipField = new javax.swing.JTextField();
         passField = new javax.swing.JTextField();
         label = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        portField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,6 +78,10 @@ public class NetworkInfo extends javax.swing.JFrame {
 
         label.setText("Start");
 
+        jLabel3.setText("Port");
+
+        portField.setText("9286");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -81,10 +93,12 @@ public class NetworkInfo extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
+                            .addComponent(jLabel3)
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(ipField, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(portField)
                             .addComponent(passField))))
                 .addContainerGap())
         );
@@ -96,11 +110,15 @@ public class NetworkInfo extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(ipField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(portField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(passField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(label, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+                .addGap(40, 40, 40)
+                .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -147,7 +165,9 @@ public class NetworkInfo extends javax.swing.JFrame {
     private javax.swing.JTextField ipField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JButton label;
     private javax.swing.JTextField passField;
+    private javax.swing.JTextField portField;
     // End of variables declaration//GEN-END:variables
 }
