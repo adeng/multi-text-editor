@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author alber
  */
 public class ClientThread implements Runnable {
-    public NetworkHandler nh;
+    public static NetworkHandler nh;
     private boolean authenticated = false;
     private boolean run = true;
     
@@ -26,6 +26,7 @@ public class ClientThread implements Runnable {
     // Server constructor
     public ClientThread(NetworkHandler nh) throws IOException {
         this.nh = nh;
+        
         sync = new ConcurrentLinkedQueue<Packet>();
     }
     

@@ -194,14 +194,15 @@ public class NetworkPage extends javax.swing.JFrame {
             actionButton.setText("Waiting for connection...");
             
             if( host ) {
-                this.setVisible(false);
-                EditorPage ep = new EditorPage();
-                ep.setVisible(true);
-                
                 MainHostThread run = new MainHostThread(port, pass);
                 thread = new Thread(run);
                 thread.start();
                 
+                new Thread(new ConnHostThread()).start();
+                
+                this.setVisible(false);
+                EditorPage ep = new EditorPage(true);
+                ep.setVisible(true);                
             } else {
                 ClientThread run = new ClientThread(new NetworkHandler(ip, port));
                 thread = new Thread(run);
@@ -226,10 +227,9 @@ public class NetworkPage extends javax.swing.JFrame {
                 
                 JOptionPane.showMessageDialog(null, "Connected!");
                 this.setVisible(false);
-                EditorPage ep = new EditorPage();
+                EditorPage ep = new EditorPage(false);
                 ep.setVisible(true);
             }
-            System.out.println("Done authenticating");
         } catch (ConnectException ex) {
             JOptionPane.showMessageDialog(null, "Host not found!");
         } catch (Exception ex) {

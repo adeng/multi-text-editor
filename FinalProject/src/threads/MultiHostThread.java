@@ -19,6 +19,7 @@ public class MultiHostThread implements Runnable {
 
     public MultiHostThread(NetworkHandler nh) throws IOException {
         this.nh = nh;
+        System.out.println("New connection!");
     }
 
     public boolean receiveAuth(String pass) throws IOException {

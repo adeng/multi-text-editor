@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
  */
 public class MainHostThread implements Runnable {    
     private boolean authenticated = false;
+    public static int port;
     public static boolean run = true;
     private ServerSocket ss;
     
@@ -33,6 +34,7 @@ public class MainHostThread implements Runnable {
     // Server constructor
     public MainHostThread(int port, String pass) throws IOException {
         ss = new ServerSocket(port);
+        this.port = port;
         this.pass = pass;
     }
 

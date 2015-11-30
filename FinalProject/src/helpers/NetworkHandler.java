@@ -32,19 +32,15 @@ public class NetworkHandler {
 
     protected OutputStream os;
     protected PrintWriter pw;
-
-    // Server constructor
-    public NetworkHandler(int port) throws IOException {
-        host = true;
-        sSock = new ServerSocket(port);
-        System.out.println("Hosting on: " + sSock.getInetAddress().getHostAddress() + ":" + port);
-        sock = sSock.accept();
-        System.out.println("Connected!");
-        initIO();
-    }
+    
+    public static String ip;
+    public static int port;
 
     // Client constructor
     public NetworkHandler(String ip, int port) throws IOException {
+        this.ip = ip;
+        this.port = port;
+        
         host = false;
         System.out.println("Connecting to: " + ip + ":" + port);
         sock = new Socket(ip, port);
