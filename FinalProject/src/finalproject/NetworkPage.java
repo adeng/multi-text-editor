@@ -6,6 +6,7 @@
 package finalproject;
 
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -37,6 +38,7 @@ public class NetworkPage extends javax.swing.JFrame {
      */
     public NetworkPage() {
         initComponents();
+        getRootPane().setDefaultButton(actionButton);
     }
 
     public NetworkPage(boolean host) {
@@ -64,9 +66,29 @@ public class NetworkPage extends javax.swing.JFrame {
             ipField.setText("");
             portField.setText("");
 
-            passLabel.setVisible(false);
+            jLabel2.setVisible(false);
             passField.setVisible(false);
         }
+    }
+    
+    private JDialog dialog;
+        
+    public void createDialog(String msg) {
+        dialog = new JDialog();
+        dialog.setTitle("Waiting");
+        dialog.setContentPane(new JOptionPane(msg, 
+                JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, 
+                null, new Object[]{}, null));
+        dialog.setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
+        
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        dialog.pack();
+        
+        dialog.setVisible(true);
+    }
+    
+    public void closeDialog() {
+        dialog.dispose();
     }
 
     /**
@@ -79,7 +101,7 @@ public class NetworkPage extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        passLabel = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         ipField = new javax.swing.JTextField();
         actionButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -88,7 +110,7 @@ public class NetworkPage extends javax.swing.JFrame {
 
         jLabel1.setText("IP Address");
 
-        passLabel.setText("Password");
+        jLabel2.setText("Password");
 
         ipField.setText("Click here to show your IP");
         ipField.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -127,7 +149,7 @@ public class NetworkPage extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel3)
-                            .addComponent(passLabel))
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(ipField, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
@@ -148,7 +170,7 @@ public class NetworkPage extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(passLabel)
+                    .addComponent(jLabel2)
                     .addComponent(passField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40)
                 .addComponent(actionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -176,6 +198,8 @@ public class NetworkPage extends javax.swing.JFrame {
         try {
             Thread auth;
             AuthHandlerThread aht;
+            
+            actionButton.setText("Waiting for connection...");
 
             if (host) {
                 aht = new AuthHandlerThread(port, pass);
@@ -204,6 +228,7 @@ public class NetworkPage extends javax.swing.JFrame {
                     Thread.sleep(500);
                 }
             } else {
+                actionButton.setText("Waiting for authentication...");
                 auth.join();
             }
 
@@ -300,9 +325,9 @@ public class NetworkPage extends javax.swing.JFrame {
     private javax.swing.JButton actionButton;
     private javax.swing.JTextField ipField;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField passField;
-    private javax.swing.JLabel passLabel;
     private javax.swing.JTextField portField;
     // End of variables declaration//GEN-END:variables
 }
