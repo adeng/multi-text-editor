@@ -38,17 +38,17 @@ public class NetworkHandler {
         host = true;
         
         sSock = new ServerSocket(port);
-        
+        System.out.println("Hosting on: " + sSock.getInetAddress().getHostAddress() + ":" + port);
         sock = sSock.accept();
-        System.out.println("Connected");
         initIO();
     }
     
     // Client constructor
     public NetworkHandler(String ip, int port) throws IOException {
         host = false;
-        
+        System.out.println("Connecting to: " + ip + ":" + port);
         sock = new Socket(ip, port);
+        System.out.println("Hosted!");
         initIO();
     }
     
