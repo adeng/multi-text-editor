@@ -5,7 +5,6 @@
  */
 package finalproject;
 
-import java.awt.Color;
 import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,7 +56,6 @@ public class MainPage extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Offline Mode");
 
-        offlineStart.setBackground(new java.awt.Color(255, 255, 255));
         offlineStart.setText("Start Offline");
         offlineStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,6 +123,11 @@ public class MainPage extends javax.swing.JFrame {
         );
 
         jMenu2.setText("Help");
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu2MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -176,6 +179,42 @@ public class MainPage extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_connectStartActionPerformed
+
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+        // TODO add your handling code here:
+        JFrame help = new JFrame("HELP");
+        help.setSize(this.getWidth(), this.getHeight()/2);
+        help.setVisible(true);
+        help.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.white);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        //panel.setLayout(new GridLayout());
+        
+        JLabel label = new JLabel("Instruction");
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        String offline = "Offline Editing: You can write to the Textarea, and save it as a text file.";
+        JLabel text = new JLabel ();
+        text.setText("<html>"+ offline +"</html>");
+        text.setLocation(10, label.getHeight()+40);
+        
+        String online = "Online Editing: You can connect with another computer, and edit the Textarea at the same time";
+        JLabel text1 = new JLabel ();
+        text1.setText("<html>"+ online +"</html>");
+        text1.setLocation(10, label.getHeight()+40);
+        
+        panel.add(Box.createHorizontalGlue());
+        panel.add(label);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(text);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(text1);
+        panel.add(Box.createVerticalStrut(10));
+        help.add(panel);
+        
+    }//GEN-LAST:event_jMenu2MouseClicked
     
     class myJPanel extends JPanel{
 

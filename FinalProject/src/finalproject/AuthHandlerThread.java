@@ -53,9 +53,9 @@ public class AuthHandlerThread extends NetworkHandler implements Runnable {
     @Override
     public void run() {
         Packet info;
+        //JFrame frame = new JFrame();
         while (!authenticated) {
             try {
-
                 // Not currently authenticated; should run password loop
                 String in = br.readLine();
                 System.out.println(in);
