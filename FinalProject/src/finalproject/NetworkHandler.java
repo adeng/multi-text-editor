@@ -21,18 +21,19 @@ import java.net.Socket;
  * @author alber
  */
 public class NetworkHandler {
+
     protected ServerSocket sSock;
     protected Socket sock;
-    
+
     protected boolean host;
-    
+
     protected InputStream is;
     protected InputStreamReader isr;
     protected BufferedReader br;
-    
+
     protected OutputStream os;
     protected PrintWriter pw;
-      
+
     // Server constructor
     public NetworkHandler(int port) throws IOException {
         host = true;
@@ -42,31 +43,33 @@ public class NetworkHandler {
         System.out.println("Connected!");
         initIO();
     }
-    
+
     // Client constructor
     public NetworkHandler(String ip, int port) throws IOException {
-        host = false;   
+        host = false;
         System.out.println("Connecting to: " + ip + ":" + port);
         sock = new Socket(ip, port);
         System.out.println("Connected!");
         initIO();
     }
-    
+
     public void initIO() throws IOException {
         // Input Stream
         is = sock.getInputStream();
         isr = new InputStreamReader(is);
         br = new BufferedReader(isr);
-        
+
         // Output Stream
         os = sock.getOutputStream();
         pw = new PrintWriter(os, true);
     }
-    
+
     public void cleanUp() throws Exception {
         br.close();
         pw.close();
         sock.close();
-        sSock.close();
+        if (host) {
+            sSock.close();
+        }
     }
 }

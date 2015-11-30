@@ -197,6 +197,8 @@ public class NetworkPage extends javax.swing.JFrame {
                     aht.sendAuth(pass);
                 }
             } while (!aht.authenticated);
+            
+            System.out.println("Done authenticating");
 
             this.setVisible(false);
             JOptionPane.showMessageDialog(null, "Connected!");
