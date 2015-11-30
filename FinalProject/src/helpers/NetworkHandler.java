@@ -51,6 +51,9 @@ public class NetworkHandler {
     public NetworkHandler(Socket s) throws IOException {
         host = false;
         sock = s;
+        
+        ip = s.getInetAddress().getHostAddress();
+        port = s.getLocalPort();
         initIO();
     }
 

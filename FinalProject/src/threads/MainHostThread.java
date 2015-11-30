@@ -32,6 +32,7 @@ public class MainHostThread implements Runnable {
     
     // Server constructor
     public MainHostThread(int port, String pass) throws IOException {
+        sockets = new ArrayList<MultiHostThread>();
         ss = new ServerSocket(port);
         this.port = port;
         this.pass = pass;
@@ -45,7 +46,6 @@ public class MainHostThread implements Runnable {
                 NetworkHandler nh = new NetworkHandler(s);
                 MultiHostThread mht = new MultiHostThread(nh);
                 sockets.add(mht);
-                System.out.println(sockets.size());
                 Thread n = new Thread(sockets.get(sockets.size()-1));
                 n.start();
             } catch (Exception ex) {
