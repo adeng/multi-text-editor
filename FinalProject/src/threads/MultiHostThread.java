@@ -8,6 +8,8 @@ package threads;
 import helpers.NetworkHandler;
 import helpers.Packet;
 import java.io.IOException;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  *
@@ -16,9 +18,12 @@ import java.io.IOException;
 public class MultiHostThread implements Runnable {
     NetworkHandler nh;
     public static boolean run = true;
+    
+    Queue<Packet> sync;
 
     public MultiHostThread(NetworkHandler nh) throws IOException {
         this.nh = nh;
+        sync = new ConcurrentLinkedQueue<Packet>();
         System.out.println("New connection!");
     }
 
@@ -26,6 +31,10 @@ public class MultiHostThread implements Runnable {
         boolean auth = (MainHostThread.pass.equals(pass));
         sendPacket(new Packet("auth", Boolean.toString(auth)));
         return auth;
+    }
+    
+    public void addPacket(Packet p) {
+        sync.add(p);
     }
     
     public void sendPacket(Packet p) {
@@ -56,7 +65,18 @@ public class MultiHostThread implements Runnable {
                     }
                 }
             }
-            // listen for other stuff
+            
+            while(run) {
+                while(sync.size() > 0) {
+                    sendPacket(sync.remove());
+                }
+                
+                try {
+                    Thread.sleep(100);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         } catch (Exception ex) {
             System.out.println("Something went wrong :(");
             ex.printStackTrace();

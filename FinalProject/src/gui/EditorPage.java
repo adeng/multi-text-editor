@@ -38,7 +38,15 @@ public class EditorPage extends javax.swing.JFrame {
             connected.setText("You are currently connected to " + 
                     ClientThread.nh.toString());
         }
-    }    
+    }
+    
+    public String getAllText() {
+        return textArea.getText();
+    }
+    
+    public void setAllText(String s) {
+        textArea.setText(s);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

@@ -5,6 +5,7 @@
  */
 package threads;
 
+import gui.EditorPage;
 import helpers.NetworkHandler;
 import helpers.Packet;
 import java.io.*;
@@ -20,6 +21,7 @@ public class ClientThread implements Runnable {
     public static NetworkHandler nh;
     private boolean authenticated = false;
     private boolean run = true;
+    EditorPage ep;
     
     private Queue<Packet> sync;
     
@@ -28,6 +30,10 @@ public class ClientThread implements Runnable {
         this.nh = nh;
         
         sync = new ConcurrentLinkedQueue<Packet>();
+    }
+    
+    public void setEditor(EditorPage ep) {
+        this.ep = ep;
     }
     
     public void addPacket(Packet p) {
@@ -64,9 +70,22 @@ public class ClientThread implements Runnable {
             
             // normal ops
             while(run) {
+                // Send all packets
                 while(sync.size() > 0) {
                     sendPacket(sync.remove());
                 }
+                
+                // Receive all packets
+                in = nh.getReader().readLine();
+                while(in != null) {
+                    info = new Packet(in);
+                    switch(info.getKey()) {
+                        case "init":
+                            ep.setAllText(info.getValue());
+                            break;
+                    }
+                    in = nh.getReader().readLine();
+                }               
                 
                 try {
                     Thread.sleep(100);

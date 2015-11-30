@@ -5,6 +5,7 @@
  */
 package threads;
 
+import gui.EditorPage;
 import helpers.NetworkHandler;
 import helpers.Packet;
 import java.io.*;
@@ -25,6 +26,7 @@ public class MainHostThread implements Runnable {
     public static int port;
     public static boolean run = true;
     private ServerSocket ss;
+    EditorPage ep;
     
     public static ArrayList<MultiHostThread> sockets;
     
@@ -36,6 +38,15 @@ public class MainHostThread implements Runnable {
         ss = new ServerSocket(port);
         this.port = port;
         this.pass = pass;
+        this.ep = ep;
+    }
+    
+    public void setEditor(EditorPage ep) {
+        this.ep = ep;
+    }
+    
+    public Packet welcomePacket() {
+        return new Packet("init", ep.getAllText());
     }
 
     @Override
@@ -45,6 +56,7 @@ public class MainHostThread implements Runnable {
                 Socket s = ss.accept();
                 NetworkHandler nh = new NetworkHandler(s);
                 MultiHostThread mht = new MultiHostThread(nh);
+                mht.addPacket(welcomePacket());
                 sockets.add(mht);
                 Thread n = new Thread(sockets.get(sockets.size()-1));
                 n.start();

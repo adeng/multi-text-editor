@@ -202,7 +202,8 @@ public class NetworkPage extends javax.swing.JFrame {
                 
                 this.setVisible(false);
                 EditorPage ep = new EditorPage(true);
-                ep.setVisible(true);                
+                ep.setVisible(true);
+                run.setEditor(ep);
             } else {
                 ClientThread run = new ClientThread(new NetworkHandler(ip, port));
                 thread = new Thread(run);
@@ -229,6 +230,7 @@ public class NetworkPage extends javax.swing.JFrame {
                 this.setVisible(false);
                 EditorPage ep = new EditorPage(false);
                 ep.setVisible(true);
+                run.setEditor(ep);
             }
         } catch (ConnectException ex) {
             JOptionPane.showMessageDialog(null, "Host not found!");
