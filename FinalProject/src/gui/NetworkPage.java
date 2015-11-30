@@ -3,26 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package finalproject;
+package gui;
 
-import java.awt.Color;
+import finalproject.NetworkHandler;
+import threads.*;
 import java.awt.Dialog;
-import java.awt.Dimension;
-import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetAddress;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
+import threads.MainHostThread;
 
 /**
  *
@@ -193,28 +187,29 @@ public class NetworkPage extends javax.swing.JFrame {
 
         int port = Integer.parseInt(portField.getText());
         String pass = passField.getText();
-        NetworkHandler nh;
+        
+        Thread thread;
 
         try {
-            Thread auth;
-            AuthHandlerThread aht;
-            
             actionButton.setText("Waiting for connection...");
-
-            if (host) {
-                nh = new NetworkHandler(port);
-            } else {
-                nh = new NetworkHandler(ip, port);
-            }
             
-            aht = new AuthHandlerThread(nh, pass);
-            auth = new Thread(aht);
-            auth.start();
-
-            boolean asked = false;
-
-            if( !host ) {
-                while(!aht.authenticated) {
+            if( host ) {
+                this.setVisible(false);
+                EditorPage ep = new EditorPage();
+                ep.setVisible(true);
+                
+                MainHostThread run = new MainHostThread(port, pass);
+                thread = new Thread(run);
+                thread.start();
+                
+            } else {
+                ClientThread run = new ClientThread(new NetworkHandler(ip, port));
+                thread = new Thread(run);
+                thread.start();
+                
+                boolean asked = false;
+                
+                while(!run.nh.authenticated) {
                     if (asked) {
                         JOptionPane.showMessageDialog(null, "Incorrect password!");
                     }
@@ -225,21 +220,16 @@ public class NetworkPage extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Not authenticated!");
                         return;
                     }
-                    aht.sendAuth(pass);
+                    run.sendAuth(pass);
                     Thread.sleep(500);
                 }
-            } else {
-                actionButton.setText("Waiting for authentication...");
-                auth.join();
+                
+                JOptionPane.showMessageDialog(null, "Connected!");
+                this.setVisible(false);
+                EditorPage ep = new EditorPage();
+                ep.setVisible(true);
             }
-
             System.out.println("Done authenticating");
-
-            this.setVisible(false);
-            JOptionPane.showMessageDialog(null, "Connected!");
-
-            EditorPage ep = new EditorPage();
-            ep.setVisible(true);
         } catch (ConnectException ex) {
             JOptionPane.showMessageDialog(null, "Host not found!");
         } catch (Exception ex) {
@@ -284,43 +274,6 @@ public class NetworkPage extends javax.swing.JFrame {
         ipField.setText(ip);
     }//GEN-LAST:event_ipFieldMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NetworkPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NetworkPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NetworkPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NetworkPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new NetworkPage().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actionButton;

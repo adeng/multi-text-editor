@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package finalproject;
+package gui;
 
+import gui.NetworkPage;
 import java.awt.Color;
 import java.awt.*;
 import java.util.logging.Level;
@@ -148,7 +149,7 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentAdded
 
     private void onlineStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onlineStartActionPerformed
-        this.setVisible(true);
+        this.setVisible(false);
         try {
             net = new NetworkPage(true);
             net.setVisible(true);
@@ -167,7 +168,7 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_offlineStartActionPerformed
 
     private void connectStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectStartActionPerformed
-        this.setVisible(true);
+        this.setVisible(false);
         try {
             net = new NetworkPage(false);
             net.setVisible(true);

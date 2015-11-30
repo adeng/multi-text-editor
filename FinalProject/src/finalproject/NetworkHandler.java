@@ -9,8 +9,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -26,6 +24,7 @@ public class NetworkHandler {
     protected Socket sock;
 
     protected boolean host;
+    public boolean authenticated = false;
 
     protected InputStream is;
     protected InputStreamReader isr;
@@ -50,6 +49,12 @@ public class NetworkHandler {
         System.out.println("Connecting to: " + ip + ":" + port);
         sock = new Socket(ip, port);
         System.out.println("Connected!");
+        initIO();
+    }
+    
+    public NetworkHandler(Socket s) throws IOException {
+        host = false;
+        sock = s;
         initIO();
     }
 

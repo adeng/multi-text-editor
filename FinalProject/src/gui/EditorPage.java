@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package finalproject;
+package gui;
 
+import threads.MainHostThread;
+import gui.NetworkPage;
 import java.util.*;
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +20,7 @@ import javax.swing.filechooser.*;
  */
 public class EditorPage extends javax.swing.JFrame {
 
-    private HostThread network;
+    private MainHostThread network;
     
     /**
      * Creates new form Main
@@ -27,7 +29,7 @@ public class EditorPage extends javax.swing.JFrame {
         initComponents();
     }
     
-    public void setNetwork( HostThread nh ) {
+    public void setNetwork( MainHostThread nh ) {
         network = nh;
     }
     
