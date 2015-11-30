@@ -193,7 +193,12 @@ public class EditorPage extends javax.swing.JFrame {
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
         // TODO add your handling code here:
+        if (checkSave == false){
+            JOptionPane.showMessageDialog(null, "Please save first");
+        }
+        else{
         System.exit(0);
+        }
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
