@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package finalproject;
+package helpers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -26,6 +24,7 @@ public class NetworkHandler {
     protected Socket sock;
 
     protected boolean host;
+    public boolean authenticated = false;
 
     protected InputStream is;
     protected InputStreamReader isr;
@@ -33,23 +32,28 @@ public class NetworkHandler {
 
     protected OutputStream os;
     protected PrintWriter pw;
-
-    // Server constructor
-    public NetworkHandler(int port) throws IOException {
-        host = true;
-        sSock = new ServerSocket(port);
-        System.out.println("Hosting on: " + sSock.getInetAddress().getHostAddress() + ":" + port);
-        sock = sSock.accept();
-        System.out.println("Connected!");
-        initIO();
-    }
+    
+    public static String ip;
+    public static int port;
 
     // Client constructor
     public NetworkHandler(String ip, int port) throws IOException {
+        this.ip = ip;
+        this.port = port;
+        
         host = false;
         System.out.println("Connecting to: " + ip + ":" + port);
         sock = new Socket(ip, port);
         System.out.println("Connected!");
+        initIO();
+    }
+    
+    public NetworkHandler(Socket s) throws IOException {
+        host = false;
+        sock = s;
+        
+        ip = s.getInetAddress().getHostAddress();
+        port = s.getLocalPort();
         initIO();
     }
 
@@ -71,5 +75,21 @@ public class NetworkHandler {
         if (host) {
             sSock.close();
         }
+    }
+
+    public PrintWriter getWriter() {
+        return pw;
+    }
+
+    public BufferedReader getReader() {
+        return br;
+    }
+
+    public boolean isHost() {
+        return host;
+    }
+    
+    public String toString() {
+        return ip + ":" + port;
     }
 }

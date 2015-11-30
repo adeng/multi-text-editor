@@ -3,24 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package finalproject;
+package gui;
 
+import threads.MainHostThread;
+import threads.ClientThread;
 import java.util.*;
 import javax.swing.*;
-import java.awt.*;
 import java.io.*;
 import java.net.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.filechooser.*;
 
 /**
  *
  * @author alber
  */
 public class EditorPage extends javax.swing.JFrame {
-
-    private HostThread network;
     protected Boolean checkSave = false;
     protected File fileName;
     
@@ -31,10 +27,18 @@ public class EditorPage extends javax.swing.JFrame {
         initComponents();
     }
     
-    public void setNetwork( HostThread nh ) {
-        network = nh;
-    }
-    
+    public EditorPage(boolean host) throws UnknownHostException {
+        this();
+        if(host) {
+            InetAddress ip = InetAddress.getLocalHost();
+            connected.setText("You are currently hosting on " + ip.getHostAddress()
+                    + ":" + MainHostThread.port + " with the password " 
+                    + MainHostThread.pass);
+        } else {
+            connected.setText("You are currently connected to " + 
+                    ClientThread.nh.toString());
+        }
+    }    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -47,7 +51,7 @@ public class EditorPage extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         textArea = new javax.swing.JTextArea();
-        jLabel1 = new javax.swing.JLabel();
+        connected = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
@@ -69,7 +73,7 @@ public class EditorPage extends javax.swing.JFrame {
         textArea.setRows(5);
         jScrollPane2.setViewportView(textArea);
 
-        jLabel1.setText("You are currently in OFFLINE mode.");
+        connected.setText("You are currently in OFFLINE mode.");
 
         jMenu1.setText("File");
 
@@ -174,7 +178,7 @@ public class EditorPage extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(connected)
                         .addGap(0, 613, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -182,7 +186,7 @@ public class EditorPage extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(connected)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -242,7 +246,7 @@ public class EditorPage extends javax.swing.JFrame {
             try {
                 writer.close();
             } catch (IOException ex) {
-                Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
         }
     }//GEN-LAST:event_jMenuItem8ActionPerformed
@@ -334,7 +338,7 @@ public class EditorPage extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel connected;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
