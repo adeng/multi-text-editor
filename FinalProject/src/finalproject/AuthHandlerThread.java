@@ -32,9 +32,8 @@ public class AuthHandlerThread extends NetworkHandler implements Callable<Boolea
     }
 
     // Client constructor
-    public AuthHandlerThread(String ip, int port, String pass) throws IOException {
+    public AuthHandlerThread(String ip, int port) throws IOException {
         super(ip, port);
-        this.pass = pass;
     }
 
     // Auth method for client
@@ -50,10 +49,14 @@ public class AuthHandlerThread extends NetworkHandler implements Callable<Boolea
 
     @Override
     public Boolean call() throws Exception {
-        System.out.println("Waiting");
         Packet info;
         while (run) {
             try {
+                if( !host ) {
+                    pass = JOptionPane.showInputDialog(null, "Please enter the password");
+                    sendAuth(pass);
+                }
+                
                 // Not currently authenticated; should run password loop
                 String in = br.readLine();
                 System.out.println(in);
@@ -70,8 +73,6 @@ public class AuthHandlerThread extends NetworkHandler implements Callable<Boolea
                         }
                     }
                 } else {
-                    sendAuth(pass);
-
                     // Wait until auth result
                     if (info.getKey().equals("auth")) {
                         if (Boolean.parseBoolean(info.getValue())) {

@@ -21,7 +21,7 @@ public class Client {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
-        Socket sock = new Socket("169.232.238.251", 5000);
+        Socket sock = new Socket("166.170.44.249", 5000);
         InputStream sis = sock.getInputStream();
         InputStreamReader isr = new InputStreamReader(sis);
         BufferedReader in = new BufferedReader(isr);

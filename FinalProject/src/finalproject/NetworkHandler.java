@@ -61,7 +61,6 @@ public class NetworkHandler {
         // Output Stream
         os = sock.getOutputStream();
         pw = new PrintWriter(os, true);
-        System.out.println("Init");
     }
     
     public void cleanUp() throws IOException {
