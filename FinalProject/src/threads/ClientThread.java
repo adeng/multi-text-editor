@@ -61,7 +61,6 @@ public class ClientThread implements Runnable {
                 
                 if (info.getKey().equals("auth")) {
                     if (Boolean.parseBoolean(info.getValue())) {
-                        nh.cleanUp();
                         nh.authenticated = true;
                         break;
                     }
@@ -93,6 +92,8 @@ public class ClientThread implements Runnable {
                     ex.printStackTrace();
                 }
             }
+            
+            nh.cleanUp();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

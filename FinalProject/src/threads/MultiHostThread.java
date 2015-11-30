@@ -59,7 +59,6 @@ public class MultiHostThread implements Runnable {
                 if (info.getKey().equals("password")) {
                     boolean auth = receiveAuth(info.getValue());
                     if (auth) {
-                        nh.cleanUp();
                         nh.authenticated = true;
                         break;
                     }
@@ -77,6 +76,8 @@ public class MultiHostThread implements Runnable {
                     ex.printStackTrace();
                 }
             }
+            
+            nh.cleanUp();
         } catch (Exception ex) {
             System.out.println("Something went wrong :(");
             ex.printStackTrace();
