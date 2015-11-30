@@ -184,7 +184,6 @@ public class NetworkPage extends javax.swing.JFrame {
 
 
     private void actionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actionButtonActionPerformed
-        HostThread nh;
         String ip = ipField.getText();
 
         if ("".equals(ip) || "".equals(portField.getText())) {
@@ -194,6 +193,7 @@ public class NetworkPage extends javax.swing.JFrame {
 
         int port = Integer.parseInt(portField.getText());
         String pass = passField.getText();
+        NetworkHandler nh;
 
         try {
             Thread auth;
@@ -202,11 +202,12 @@ public class NetworkPage extends javax.swing.JFrame {
             actionButton.setText("Waiting for connection...");
 
             if (host) {
-                aht = new AuthHandlerThread(port, pass);
+                nh = new NetworkHandler(port);
             } else {
-                aht = new AuthHandlerThread(ip, port);
+                nh = new NetworkHandler(ip, port);
             }
-
+            
+            aht = new AuthHandlerThread(nh, pass);
             auth = new Thread(aht);
             auth.start();
 

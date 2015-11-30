@@ -72,4 +72,16 @@ public class NetworkHandler {
             sSock.close();
         }
     }
+
+    public PrintWriter getWriter() {
+        return pw;
+    }
+
+    public BufferedReader getReader() {
+        return br;
+    }
+
+    public boolean isHost() {
+        return host;
+    }
 }

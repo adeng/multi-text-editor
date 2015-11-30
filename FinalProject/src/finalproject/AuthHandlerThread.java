@@ -22,31 +22,25 @@ import javax.swing.JOptionPane;
  *
  * @author alber
  */
-public class AuthHandlerThread extends NetworkHandler implements Runnable {
-
+public class AuthHandlerThread implements Runnable {
+    NetworkHandler nh;
     public boolean authenticated = false;
     private boolean run = true;
     private String pass;
 
-    // Server constructor
-    public AuthHandlerThread(int port, String pass) throws IOException {
-        super(port);
-        this.pass = pass;
-    }
-
-    // Client constructor
-    public AuthHandlerThread(String ip, int port) throws IOException {
-        super(ip, port);
+    public AuthHandlerThread(NetworkHandler nh, String pass) throws IOException {
+        this.nh = nh;
+        this.pass = pass; // only matters for host
     }
 
     // Auth method for client
     public void sendAuth(String pass) throws IOException {
-        pw.println(new Packet("password", pass).toString());
+        nh.getWriter().println(new Packet("password", pass).toString());
     }
 
     public boolean receiveAuth(String pass) throws IOException {
         boolean auth = (this.pass.equals(pass));
-        pw.println(new Packet("auth", Boolean.toString(auth)).toString());
+        nh.getWriter().println(new Packet("auth", Boolean.toString(auth)).toString());
         return auth;
     }
 
@@ -57,17 +51,17 @@ public class AuthHandlerThread extends NetworkHandler implements Runnable {
             try {
 
                 // Not currently authenticated; should run password loop
-                String in = br.readLine();
+                String in = nh.getReader().readLine();
                 System.out.println(in);
                 info = new Packet(in);
 
                 // Host should only end thread once authenticated
                 // Client will end thread on response; design to try again later
-                if (host) {
+                if (nh.isHost()) {
                     if (info.getKey().equals("password")) {
                         boolean auth = receiveAuth(info.getValue());
                         if (auth) {
-                            cleanUp();
+                            nh.cleanUp();
                             authenticated = true;
                             break;
                         }
@@ -75,7 +69,7 @@ public class AuthHandlerThread extends NetworkHandler implements Runnable {
                 } else {
                     if (info.getKey().equals("auth")) {
                         if (Boolean.parseBoolean(info.getValue())) {
-                            cleanUp();
+                            nh.cleanUp();
                             authenticated = true;
                             break;
                         }
@@ -90,7 +84,7 @@ public class AuthHandlerThread extends NetworkHandler implements Runnable {
         System.out.println("Authenticated! " + authenticated);
 
         try {
-            cleanUp();
+            nh.cleanUp();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
