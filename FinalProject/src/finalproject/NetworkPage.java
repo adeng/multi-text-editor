@@ -166,40 +166,29 @@ public class NetworkPage extends javax.swing.JFrame {
         int port = Integer.parseInt(portField.getText());
         String pass = passField.getText();
 
-        final ExecutorService service;
-        final Future<Boolean> task;
-
-        service = Executors.newFixedThreadPool(1);
         try {
-            final boolean auth;
+            Thread auth;
             /*
             WaitThread wt = new WaitThread();
             Thread wait = new Thread(wt);
             wait.start(); */
             
             if (host) {
-                task = service.submit(new AuthHandlerThread(port, pass));
+                auth = new Thread(new AuthHandlerThread(port, pass));
             } else {
-                task = service.submit(new AuthHandlerThread(ip, port));
+                auth = new Thread(new AuthHandlerThread(ip, port));
             }
             
-            // wt.closeDialog();
+            auth.start();
             
-            auth = task.get();            
+            auth.join();
 
             this.setVisible(false);
 
-            if (auth) {
-                JOptionPane.showMessageDialog(null, "Connected!");
-                this.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Connected!");
 
-                EditorPage ep = new EditorPage();
-                ep.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(null, "Incorrect password");
-            }
-            
-            service.shutdownNow();
+            EditorPage ep = new EditorPage();
+            ep.setVisible(true);
         } catch (Exception ex) {
             System.out.println("Something went wrong :(");
             ex.printStackTrace();

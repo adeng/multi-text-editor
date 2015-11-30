@@ -13,15 +13,17 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author alber
  */
-public class AuthHandlerThread extends NetworkHandler implements Callable<Boolean> {
+public class AuthHandlerThread extends NetworkHandler implements Runnable {
 
-    private boolean authenticated;
+    private boolean authenticated = false;
     private boolean run = true;
     private String pass;
 
@@ -48,15 +50,15 @@ public class AuthHandlerThread extends NetworkHandler implements Callable<Boolea
     }
 
     @Override
-    public Boolean call() throws Exception {
+    public void run() {
         Packet info;
-        while (run) {
+        while (!authenticated) {
             try {
-                if( !host ) {
+                if (!host) {
                     pass = JOptionPane.showInputDialog(null, "Please enter the password");
                     sendAuth(pass);
                 }
-                
+
                 // Not currently authenticated; should run password loop
                 String in = br.readLine();
                 System.out.println(in);
@@ -67,22 +69,17 @@ public class AuthHandlerThread extends NetworkHandler implements Callable<Boolea
                 if (host) {
                     if (info.getKey().equals("password")) {
                         boolean auth = receiveAuth(info.getValue());
-                        if( auth ) {
+                        if (auth) {
                             cleanUp();
-                            return true;
+                            authenticated = true;
                         }
                     }
-                } else {
-                    // Wait until auth result
-                    if (info.getKey().equals("auth")) {
-                        if (Boolean.parseBoolean(info.getValue())) {
-                            cleanUp();
-                            return true;
-                        }
-
-                        // Kill thread
-                        return false;
-                    }
+                } else // Wait until auth result
+                if (info.getKey().equals("auth")) {
+                    if (Boolean.parseBoolean(info.getValue())) {
+                        cleanUp();
+                        authenticated = true;
+                    };
                 }
             } catch (Exception ex) {
                 System.out.println("Something went wrong :(");
@@ -90,7 +87,10 @@ public class AuthHandlerThread extends NetworkHandler implements Callable<Boolea
             }
         }
 
-        cleanUp();
-        return false;
+        try {
+            cleanUp();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }
