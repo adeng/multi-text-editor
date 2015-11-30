@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -55,7 +56,7 @@ public class AuthHandlerThread extends NetworkHandler implements Runnable {
         while (!authenticated) {
             try {
                 if (!host) {
-                    pass = JOptionPane.showInputDialog(null, "Please enter the password");
+                    pass = JOptionPane.showInputDialog(new JFrame(), "Please enter the password");
                     sendAuth(pass);
                 }
 
