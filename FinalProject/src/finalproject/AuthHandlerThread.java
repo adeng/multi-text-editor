@@ -24,7 +24,7 @@ import javax.swing.JOptionPane;
  */
 public class AuthHandlerThread extends NetworkHandler implements Runnable {
 
-    private boolean authenticated = false;
+    public boolean authenticated = false;
     private boolean run = true;
     private String pass;
 
@@ -55,10 +55,6 @@ public class AuthHandlerThread extends NetworkHandler implements Runnable {
         Packet info;
         while (!authenticated) {
             try {
-                if (!host) {
-                    pass = JOptionPane.showInputDialog(new JFrame(), "Please enter the password");
-                    sendAuth(pass);
-                }
 
                 // Not currently authenticated; should run password loop
                 String in = br.readLine();

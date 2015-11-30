@@ -168,20 +168,27 @@ public class NetworkPage extends javax.swing.JFrame {
 
         try {
             Thread auth;
+            AuthHandlerThread aht;
             /*
             WaitThread wt = new WaitThread();
             Thread wait = new Thread(wt);
             wait.start(); */
             
             if (host) {
-                auth = new Thread(new AuthHandlerThread(port, pass));
+                aht = new AuthHandlerThread(port, pass);
             } else {
-                auth = new Thread(new AuthHandlerThread(ip, port));
+                aht = new AuthHandlerThread(ip, port);
             }
             
+            auth = new Thread(aht);            
             auth.start();
             
-            auth.join();
+            while(!aht.authenticated) {
+                if (!host) {
+                    pass = JOptionPane.showInputDialog(new JFrame(), "Please enter the password");
+                    aht.sendAuth(pass);
+                }
+            }
 
             this.setVisible(false);
 
