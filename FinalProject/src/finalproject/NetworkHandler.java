@@ -63,7 +63,7 @@ public class NetworkHandler {
         pw = new PrintWriter(os, true);
     }
     
-    public void cleanUp() throws IOException {
+    public void cleanUp() throws Exception {
         br.close();
         pw.close();
         sock.close();

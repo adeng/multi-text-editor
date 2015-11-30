@@ -91,7 +91,7 @@ public class AuthHandlerThread extends NetworkHandler implements Runnable {
 
         try {
             cleanUp();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
