@@ -5,36 +5,47 @@
  */
 package finalproject;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
 
 /**
  *
  * @author alber
  */
 public class NetworkPage extends javax.swing.JFrame {
+
     private boolean host;
     private int pass;
-    
+
     /**
      * Creates new form HostStart
      */
     public NetworkPage() {
         initComponents();
     }
-    
-    public NetworkPage( boolean host ) {
+
+    public NetworkPage(boolean host) {
         this();
         this.host = host;
-        
-        if( host ) {
+
+        passField.setText("");
+
+        if (host) {
             actionButton.setText("Host Session");
-            pass = (int) (Math.round(Math.random() * 99999) + 
-                    100000*Math.floor(Math.random()*9 + 1));
-            
+
             try {
                 InetAddress ip = InetAddress.getLocalHost();
                 ipField.setText(ip.getHostAddress());
@@ -42,14 +53,14 @@ public class NetworkPage extends javax.swing.JFrame {
                 ipField.setText("Error! Something went wrong");
                 ex.printStackTrace();
             }
-            
+
             ipField.setEditable(false);
-            passField.setText(Integer.toString(pass));
-            passField.setEditable(false);
+            //passField.setText(Integer.toString(pass));
+            //passField.setEditable(false);
         } else {
             actionButton.setText("Connect to Session");
             ipField.setText("");
-            passField.setText("");
+            //passField.setText("");
             portField.setText("");
         }
     }
@@ -66,20 +77,26 @@ public class NetworkPage extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         ipField = new javax.swing.JTextField();
-        passField = new javax.swing.JTextField();
         actionButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         portField = new javax.swing.JTextField();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        passField = new javax.swing.JPasswordField();
 
         jLabel1.setText("IP Address");
 
         jLabel2.setText("Password");
 
-        ipField.setText("jTextField1");
-
-        passField.setText("jTextField2");
+        ipField.setText("Click here to show your IP");
+        ipField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ipFieldMouseClicked(evt);
+            }
+        });
+        ipField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ipFieldActionPerformed(evt);
+            }
+        });
 
         actionButton.setText("Start");
         actionButton.addActionListener(new java.awt.event.ActionListener() {
@@ -91,6 +108,18 @@ public class NetworkPage extends javax.swing.JFrame {
         jLabel3.setText("Port");
 
         portField.setText("9286");
+
+        passField.setText("jPasswordField1");
+        passField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                passFieldMouseClicked(evt);
+            }
+        });
+        passField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passFieldActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -135,40 +164,50 @@ public class NetworkPage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private Boolean testPassword = false;
+
+
     private void actionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actionButtonActionPerformed
         NetworkHandlerThread nh;
         String ip = ipField.getText();
         int port = Integer.parseInt(portField.getText());
-        int pass = Integer.parseInt(passField.getText());
-        
+        String pass = passField.getText();
+
         final ExecutorService service;
-        final Future<Boolean>  task;
+        final Future<Boolean> task;
 
         service = Executors.newFixedThreadPool(1);
         try {
             final boolean auth;
-            
-            if( host ) {
+            JOptionPane.showMessageDialog(null, "Waiting for connection");
+
+            if (host) {
                 task = service.submit(new AuthHandlerThread(port, pass));
             } else {
                 task = service.submit(new AuthHandlerThread(ip, port, pass));
             }
-            
+
             auth = task.get();
-            System.out.println(auth);
-            service.shutdownNow();
+
+            this.setVisible(false);
+
+            if (auth) {
+                JOptionPane.showMessageDialog(null, "Connected!");
+                this.setVisible(false);
+
+                EditorPage ep = new EditorPage();
+                ep.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Incorrect password");
+            }
             
+            service.shutdownNow();
         } catch (Exception ex) {
             System.out.println("Something went wrong :(");
             ex.printStackTrace();
         }
-        
-        this.setVisible(false);
-        
-        EditorPage ep = new EditorPage();
-        ep.setVisible(true);
-        
-        try {
+
+        /*try {
             if( host ) {
                 nh = new NetworkHandlerThread(Integer.parseInt(portField.getText()), 
                         Integer.parseInt(passField.getText()));
@@ -182,9 +221,50 @@ public class NetworkPage extends javax.swing.JFrame {
         } catch ( Exception ex ) {
             System.out.println("Something went wrong :(");
             ex.printStackTrace();
-        }
-        
+        }*/
+
     }//GEN-LAST:event_actionButtonActionPerformed
+
+    private void ipFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ipFieldActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_ipFieldActionPerformed
+
+    private void ipFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ipFieldMouseClicked
+        // TODO add your handling code here:
+        InetAddress addr;
+        String ip = "";
+        try {
+            addr = InetAddress.getLocalHost();
+            ip = addr.getHostAddress();
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        ipField.setText(ip);
+    }//GEN-LAST:event_ipFieldMouseClicked
+
+    private void passFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passFieldMouseClicked
+        // TODO add your handling code here:
+        passField.setText("");
+    }//GEN-LAST:event_passFieldMouseClicked
+
+    private void passFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passFieldActionPerformed
+        // TODO add your handling code here:
+        passField.setEchoChar('*');
+        JPasswordField input = (JPasswordField) evt.getSource();
+        char[] pass = input.getPassword();
+        String pass1 = new String(pass);
+
+        /*
+        if (pass1.equals(passInput)){
+            JOptionPane.showMessageDialog(null, "Thank you! Now you can start!");
+            testPassword = true;
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Password is not correct");
+        } */
+    }//GEN-LAST:event_passFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -230,7 +310,7 @@ public class NetworkPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField passField;
+    private javax.swing.JPasswordField passField;
     private javax.swing.JTextField portField;
     // End of variables declaration//GEN-END:variables
 }

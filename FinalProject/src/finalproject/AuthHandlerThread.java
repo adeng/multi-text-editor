@@ -23,27 +23,27 @@ public class AuthHandlerThread extends NetworkHandler implements Callable<Boolea
 
     private boolean authenticated;
     private boolean run = true;
-    private int pass;
+    private String pass;
 
     // Server constructor
-    public AuthHandlerThread(int port, int pass) throws IOException {
+    public AuthHandlerThread(int port, String pass) throws IOException {
         super(port);
         this.pass = pass;
     }
 
     // Client constructor
-    public AuthHandlerThread(String ip, int port, int pass) throws IOException {
+    public AuthHandlerThread(String ip, int port, String pass) throws IOException {
         super(ip, port);
         this.pass = pass;
     }
 
     // Auth method for client
-    public void sendAuth(int pass) throws IOException {
+    public void sendAuth(String pass) throws IOException {
         oos.writeObject(new Packet("password", pass));
     }
 
-    public boolean receiveAuth(int pass) throws IOException {
-        boolean auth = (this.pass == pass);
+    public boolean receiveAuth(String pass) throws IOException {
+        boolean auth = (this.pass.equals(pass));
         oos.writeObject(new Packet("auth", Boolean.toString(auth)));
         return auth;
     }
@@ -60,7 +60,7 @@ public class AuthHandlerThread extends NetworkHandler implements Callable<Boolea
                 // Client will end thread on response; design to try again later
                 if (host) {
                     if (info.getKey().equals("password")) {
-                        boolean auth = receiveAuth(Integer.parseInt(info.getValue()));
+                        boolean auth = receiveAuth(info.getValue());
                         if( auth ) {
                             cleanUp();
                             return true;

@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
+import javax.swing.filechooser.*;
 
 /**
  *
@@ -69,15 +70,35 @@ public class EditorPage extends javax.swing.JFrame {
         jMenu1.setText("File");
 
         jMenuItem6.setText("New");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem6);
 
         jMenuItem7.setText("Open");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem7);
 
         jMenuItem8.setText("Save");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem8);
 
         jMenuItem9.setText("Save As");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem9);
 
         jMenuItem10.setText("Quit");
@@ -101,9 +122,19 @@ public class EditorPage extends javax.swing.JFrame {
         jMenu2.add(jMenuItem4);
 
         jMenuItem3.setText("Cut");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem3);
 
         jMenuItem5.setText("Paste");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem5);
 
         jMenuBar1.add(jMenu2);
@@ -116,6 +147,11 @@ public class EditorPage extends javax.swing.JFrame {
         });
 
         jMenuItem2.setText("Host Info");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem2);
 
         jMenuItem1.setText("Connect To");
@@ -153,15 +189,119 @@ public class EditorPage extends javax.swing.JFrame {
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
         // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_jMenu3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        
+        textArea.copy();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        // TODO add your handling code here:
+        /*final JFileChooser SaveAs = new JFileChooser();
+        SaveAs.setApproveButtonText("Save");
+        int actionDialog = SaveAs.showOpenDialog(this);
+        if (actionDialog != JFileChooser.APPROVE_OPTION) {
+            return;
+        }*/
+        /*File filename;
+        
+        try {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+        writer.write(textArea.getText());
+        } catch (IOException err) {
+            err.printStackTrace();
+        }
+        finally{
+         writer.close();
+    }*/
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        /* NetworkPage info = new NetworkPage();
+        info.setVisible(true); */
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        EditorPage newPage = new EditorPage();
+        newPage.setVisible(true);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        // TODO add your handling code here:      
+        final JFileChooser SaveAs = new JFileChooser();
+        SaveAs.setApproveButtonText("Save As");
+        int actionDialog = SaveAs.showOpenDialog(this);
+        if (actionDialog != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        File fileName = new File(SaveAs.getSelectedFile() + ".txt");
+        BufferedWriter outFile = null;
+        
+        try {
+         outFile = new BufferedWriter(new FileWriter(fileName));
+         textArea.write(outFile);   
+      } catch (IOException ex) {
+         ex.printStackTrace();
+      } finally {
+         if (outFile != null) {
+            try {
+               outFile.close();
+            } catch (IOException e) {
+            }
+         }
+      }
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        // TODO add your handling code here:
+        try{
+            JFileChooser loadEmp = new JFileChooser();
+            File selectedFile;
+            BufferedReader in;
+            FileReader reader = null;
+            if (loadEmp.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){
+                selectedFile = loadEmp.getSelectedFile();
+                if (selectedFile.canRead() && selectedFile.exists()){
+                    reader = new FileReader(selectedFile);
+                }
+            }
+            in = new BufferedReader(reader);
+            
+            String inputLine = in.readLine();
+            while(inputLine!=null){
+                StringTokenizer tokenizer = new StringTokenizer(inputLine);
+                textArea.append(inputLine+"\n");
+                inputLine = in.readLine();
+            }
+            in.close();
+        }
+        catch(IOException ex){
+            textArea.append("Error Processing File:\n" + ex.getMessage()+"\n");
+        }
+        catch(NullPointerException ex)
+        {
+            textArea.append("Open File Cancelled:\n" + ex.getMessage()+"\n");
+        }
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        textArea.cut();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        textArea.paste();
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

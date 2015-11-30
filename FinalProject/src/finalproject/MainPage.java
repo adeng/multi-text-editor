@@ -25,8 +25,6 @@ public class MainPage extends javax.swing.JFrame {
         initComponents();
     }
     
-    private String passInput = "pic20a";
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -128,7 +126,7 @@ public class MainPage extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentAdded
 
     private void onlineStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onlineStartActionPerformed
-        this.setVisible(false);
+        this.setVisible(true);
         try {
             net = new NetworkPage(true);
             net.setVisible(true);
