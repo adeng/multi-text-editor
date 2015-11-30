@@ -31,6 +31,10 @@ public class MultiHostThread implements Runnable {
     public void sendPacket(Packet p) {
         nh.getWriter().println(p.toString());
     }
+    
+    public String toString() {
+        return nh.toString();
+    }
 
     @Override
     public void run() {

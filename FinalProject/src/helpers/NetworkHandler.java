@@ -85,4 +85,8 @@ public class NetworkHandler {
     public boolean isHost() {
         return host;
     }
+    
+    public String toString() {
+        return ip + ":" + port;
+    }
 }

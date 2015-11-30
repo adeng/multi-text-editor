@@ -34,7 +34,7 @@ public class EditorPage extends javax.swing.JFrame {
                     + MainHostThread.pass);
         } else {
             connected.setText("You are currently connected to " + 
-                    ClientThread.nh.ip + ":" + ClientThread.nh.port);
+                    ClientThread.nh.toString());
         }
     }    
 

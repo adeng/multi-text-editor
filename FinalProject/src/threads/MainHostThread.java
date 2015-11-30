@@ -26,7 +26,6 @@ public class MainHostThread implements Runnable {
     public static boolean run = true;
     private ServerSocket ss;
     
-    // Using package-private access level
     public static ArrayList<MultiHostThread> sockets;
     
     public static String pass;
@@ -42,7 +41,11 @@ public class MainHostThread implements Runnable {
     public void run() {
         while(run) {
             try {
-                sockets.add(new MultiHostThread(new NetworkHandler(ss.accept())));
+                Socket s = ss.accept();
+                NetworkHandler nh = new NetworkHandler(s);
+                MultiHostThread mht = new MultiHostThread(nh);
+                sockets.add(mht);
+                System.out.println(sockets.size());
                 Thread n = new Thread(sockets.get(sockets.size()-1));
                 n.start();
             } catch (Exception ex) {
