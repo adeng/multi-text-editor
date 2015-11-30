@@ -187,15 +187,21 @@ public class NetworkPage extends javax.swing.JFrame {
             auth = new Thread(aht);            
             auth.start();
             
+            boolean asked = false;
+            
             do {
+                if( asked ) {
+                    JOptionPane.showMessageDialog(null, "Incorrect password!");
+                }
+                
                 if (!aht.authenticated && !host) {
+                    asked = true;
                     pass = JOptionPane.showInputDialog(new JFrame(), "Please enter the password");
                     if( pass == null ) {
                         JOptionPane.showMessageDialog(null, "Not authenticated!");
                         return;
                     }
                     aht.sendAuth(pass);
-                    Thread.currentThread().wait();
                 }
             } while (!aht.authenticated);
             

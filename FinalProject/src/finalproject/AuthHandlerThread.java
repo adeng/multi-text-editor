@@ -77,10 +77,8 @@ public class AuthHandlerThread extends NetworkHandler implements Runnable {
                         if (Boolean.parseBoolean(info.getValue())) {
                             cleanUp();
                             authenticated = true;
-                            Thread.currentThread().notify();
                             break;
                         }
-                        Thread.currentThread().notify();
                     }
                 }
             } catch (Exception ex) {
