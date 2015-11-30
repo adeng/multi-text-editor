@@ -5,8 +5,8 @@
  */
 package threads;
 
-import finalproject.NetworkHandler;
-import finalproject.Packet;
+import helpers.NetworkHandler;
+import helpers.Packet;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;

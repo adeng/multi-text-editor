@@ -5,11 +5,11 @@
  */
 package threads;
 
-import finalproject.NetworkHandler;
-import finalproject.Packet;
+import helpers.NetworkHandler;
+import helpers.Packet;
 import java.io.*;
-import java.net.Socket;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
@@ -21,16 +21,25 @@ public class ClientThread implements Runnable {
     private boolean authenticated = false;
     private boolean run = true;
     
-    private Queue<Packet> syncQueue;
+    private Queue<Packet> sync;
     
     // Server constructor
     public ClientThread(NetworkHandler nh) throws IOException {
         this.nh = nh;
+        sync = new ConcurrentLinkedQueue<Packet>();
+    }
+    
+    public void addPacket(Packet p) {
+        sync.add(p);
     }
     
     // Auth method for client
     public void sendAuth(String pass) throws IOException {
-        nh.getWriter().println(new Packet("password", pass).toString());
+        sendPacket(new Packet("password", pass));
+    }
+    
+    public void sendPacket(Packet p) {
+        nh.getWriter().println(p.toString());
     }
 
     @Override
@@ -52,8 +61,17 @@ public class ClientThread implements Runnable {
                 }
             }
             
+            // normal ops
             while(run) {
+                while(sync.size() > 0) {
+                    sendPacket(sync.remove());
+                }
                 
+                try {
+                    Thread.sleep(100);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();

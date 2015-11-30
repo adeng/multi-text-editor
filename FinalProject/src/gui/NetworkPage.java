@@ -5,7 +5,7 @@
  */
 package gui;
 
-import finalproject.NetworkHandler;
+import helpers.NetworkHandler;
 import threads.*;
 import java.awt.Dialog;
 import java.net.ConnectException;

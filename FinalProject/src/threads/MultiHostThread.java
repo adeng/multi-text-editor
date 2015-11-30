@@ -5,8 +5,8 @@
  */
 package threads;
 
-import finalproject.NetworkHandler;
-import finalproject.Packet;
+import helpers.NetworkHandler;
+import helpers.Packet;
 import java.io.IOException;
 
 /**
@@ -23,8 +23,12 @@ public class MultiHostThread implements Runnable {
 
     public boolean receiveAuth(String pass) throws IOException {
         boolean auth = (MainHostThread.pass.equals(pass));
-        nh.getWriter().println(new Packet("auth", Boolean.toString(auth)).toString());
+        sendPacket(new Packet("auth", Boolean.toString(auth)));
         return auth;
+    }
+    
+    public void sendPacket(Packet p) {
+        nh.getWriter().println(p.toString());
     }
 
     @Override
