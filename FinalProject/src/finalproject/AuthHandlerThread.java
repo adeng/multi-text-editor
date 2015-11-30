@@ -69,20 +69,25 @@ public class AuthHandlerThread extends NetworkHandler implements Runnable {
                         if (auth) {
                             cleanUp();
                             authenticated = true;
+                            break;
                         }
                     }
-                } else // Wait until auth result
-                if (info.getKey().equals("auth")) {
-                    if (Boolean.parseBoolean(info.getValue())) {
-                        cleanUp();
-                        authenticated = true;
-                    };
+                } else {
+                    if (info.getKey().equals("auth")) {
+                        if (Boolean.parseBoolean(info.getValue())) {
+                            cleanUp();
+                            authenticated = true;
+                            break;
+                        }
+                    }
                 }
             } catch (Exception ex) {
                 System.out.println("Something went wrong :(");
                 ex.printStackTrace();
             }
         }
+        
+        System.out.println("Authenticated!");
 
         try {
             cleanUp();

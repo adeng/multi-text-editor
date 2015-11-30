@@ -169,10 +169,6 @@ public class NetworkPage extends javax.swing.JFrame {
         try {
             Thread auth;
             AuthHandlerThread aht;
-            /*
-            WaitThread wt = new WaitThread();
-            Thread wait = new Thread(wt);
-            wait.start(); */
             
             if (host) {
                 aht = new AuthHandlerThread(port, pass);
@@ -183,15 +179,14 @@ public class NetworkPage extends javax.swing.JFrame {
             auth = new Thread(aht);            
             auth.start();
             
-            while(!aht.authenticated) {
-                if (!host) {
+            do {
+                if (!aht.authenticated && !host) {
                     pass = JOptionPane.showInputDialog(new JFrame(), "Please enter the password");
                     aht.sendAuth(pass);
                 }
-            }
+            } while (!aht.authenticated);
 
             this.setVisible(false);
-
             JOptionPane.showMessageDialog(null, "Connected!");
 
             EditorPage ep = new EditorPage();

@@ -66,5 +66,7 @@ public class NetworkHandler {
     public void cleanUp() throws IOException {
         br.close();
         pw.close();
+        sock.close();
+        sSock.close();
     }
 }
