@@ -35,7 +35,7 @@ public class Packet implements Serializable {
         String stripped = json.substring(1, json.length() - 1);
         String[] comps = stripped.split(":");
         key = comps[0];
-        value = comps[1];
+        value = comps.length == 0 ? "" : comps[1];
     }
     
     public static boolean isPacket(String s) {

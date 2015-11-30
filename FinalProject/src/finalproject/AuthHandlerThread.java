@@ -87,7 +87,7 @@ public class AuthHandlerThread extends NetworkHandler implements Runnable {
             }
         }
         
-        System.out.println("Authenticated!");
+        System.out.println("Authenticated! " + authenticated);
 
         try {
             cleanUp();

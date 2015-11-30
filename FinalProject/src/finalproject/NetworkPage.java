@@ -63,7 +63,7 @@ public class NetworkPage extends javax.swing.JFrame {
             actionButton.setText("Connect to Session");
             ipField.setText("");
             portField.setText("");
-            
+
             passLabel.setVisible(false);
             passField.setVisible(false);
         }
@@ -164,47 +164,49 @@ public class NetworkPage extends javax.swing.JFrame {
     private void actionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actionButtonActionPerformed
         NetworkHandlerThread nh;
         String ip = ipField.getText();
-        
-        if( "".equals(ip) || "".equals(portField.getText()) ) {
+
+        if ("".equals(ip) || "".equals(portField.getText())) {
             JOptionPane.showMessageDialog(null, "Invalid IP/port!");
             return;
         }
-        
+
         int port = Integer.parseInt(portField.getText());
         String pass = passField.getText();
-        
 
         try {
             Thread auth;
             AuthHandlerThread aht;
-            
+
             if (host) {
                 aht = new AuthHandlerThread(port, pass);
             } else {
                 aht = new AuthHandlerThread(ip, port);
             }
-            
-            auth = new Thread(aht);            
+
+            auth = new Thread(aht);
             auth.start();
-            
+
             boolean asked = false;
-            
-            do {
-                if( asked ) {
-                    JOptionPane.showMessageDialog(null, "Incorrect password!");
-                }
-                
-                if (!aht.authenticated && !host) {
+
+            if( !host ) {
+                while(!aht.authenticated) {
+                    if (asked) {
+                        JOptionPane.showMessageDialog(null, "Incorrect password!");
+                    }
+
                     asked = true;
                     pass = JOptionPane.showInputDialog(new JFrame(), "Please enter the password");
-                    if( pass == null ) {
+                    if (pass == null) {
                         JOptionPane.showMessageDialog(null, "Not authenticated!");
                         return;
                     }
                     aht.sendAuth(pass);
+                    Thread.sleep(500);
                 }
-            } while (!aht.authenticated);
-            
+            } else {
+                auth.join();
+            }
+
             System.out.println("Done authenticating");
 
             this.setVisible(false);
