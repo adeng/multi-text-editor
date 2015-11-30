@@ -195,6 +195,7 @@ public class NetworkPage extends javax.swing.JFrame {
                         return;
                     }
                     aht.sendAuth(pass);
+                    Thread.currentThread().wait();
                 }
             } while (!aht.authenticated);
             
