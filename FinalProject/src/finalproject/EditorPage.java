@@ -18,7 +18,7 @@ import javax.swing.filechooser.*;
  */
 public class EditorPage extends javax.swing.JFrame {
 
-    private NetworkHandlerThread network;
+    private HostThread network;
     
     /**
      * Creates new form Main
@@ -27,7 +27,7 @@ public class EditorPage extends javax.swing.JFrame {
         initComponents();
     }
     
-    public void setNetwork( NetworkHandlerThread nh ) {
+    public void setNetwork( HostThread nh ) {
         network = nh;
     }
     

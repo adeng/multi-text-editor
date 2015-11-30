@@ -184,7 +184,7 @@ public class NetworkPage extends javax.swing.JFrame {
 
 
     private void actionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actionButtonActionPerformed
-        NetworkHandlerThread nh;
+        HostThread nh;
         String ip = ipField.getText();
 
         if ("".equals(ip) || "".equals(portField.getText())) {

@@ -8,6 +8,7 @@ package finalproject;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -18,25 +19,15 @@ import javax.swing.JOptionPane;
  *
  * @author alber
  */
-public class NetworkHandlerThread extends NetworkHandler implements Runnable {    
+public class ClientThread extends NetworkHandler implements Runnable {    
     private boolean authenticated = false;
-    private int pass;
     private boolean run = true;
     
-    // Server constructor
-    public NetworkHandlerThread(int port, int pass) throws IOException {
-        super(port);
-        this.pass = pass;
-        
-        sSock = new ServerSocket(port);
-        sock = sSock.accept();
-        initIO();
-    }
+    private Queue<Packet> syncQueue;
     
-    // Client constructor
-    public NetworkHandlerThread(String ip, int port, int pass) throws IOException {
-        super(ip, port);
-        this.pass = pass;
+    // Server constructor
+    public ClientThread(String ip, int port) throws IOException {
+        super(port);
         
         sock = new Socket(ip, port);
         initIO();
@@ -44,5 +35,8 @@ public class NetworkHandlerThread extends NetworkHandler implements Runnable {
 
     @Override
     public void run() {
+        while(run) {
+            
+        }
     }
 }
