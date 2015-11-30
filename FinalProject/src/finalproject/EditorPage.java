@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.filechooser.*;
 
 /**
@@ -19,6 +21,8 @@ import javax.swing.filechooser.*;
 public class EditorPage extends javax.swing.JFrame {
 
     private HostThread network;
+    protected Boolean checkSave = false;
+    protected File fileName;
     
     /**
      * Creates new form Main
@@ -48,7 +52,7 @@ public class EditorPage extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem8 = new mySaveButton();
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -201,25 +205,41 @@ public class EditorPage extends javax.swing.JFrame {
         textArea.copy();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+    
+    
+    class mySaveButton extends JMenuItem{       
+        public mySaveButton(){
+            this.setEnabled(checkSave);
+        }
+    }
+    
+    
+    
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         // TODO add your handling code here:
+
         /*final JFileChooser SaveAs = new JFileChooser();
         SaveAs.setApproveButtonText("Save");
         int actionDialog = SaveAs.showOpenDialog(this);
         if (actionDialog != JFileChooser.APPROVE_OPTION) {
             return;
         }*/
-        /*File filename;
+        //File filename;
+        BufferedWriter writer = null;
         
         try {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+        writer = new BufferedWriter(new FileWriter(fileName));
         writer.write(textArea.getText());
         } catch (IOException err) {
             err.printStackTrace();
         }
         finally{
-         writer.close();
-    }*/
+            try {
+                writer.close();
+            } catch (IOException ex) {
+                Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -243,7 +263,7 @@ public class EditorPage extends javax.swing.JFrame {
             return;
         }
 
-        File fileName = new File(SaveAs.getSelectedFile() + ".txt");
+        fileName = new File(SaveAs.getSelectedFile() + ".txt");
         BufferedWriter outFile = null;
         
         try {
@@ -259,6 +279,9 @@ public class EditorPage extends javax.swing.JFrame {
             }
          }
       }
+        checkSave = true;
+        jMenuItem8.setEnabled(checkSave);
+        //System.out.println(checkSave);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
@@ -291,6 +314,7 @@ public class EditorPage extends javax.swing.JFrame {
         {
             textArea.append("Open File Cancelled:\n" + ex.getMessage()+"\n");
         }
+        checkSave = true;
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed

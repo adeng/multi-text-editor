@@ -185,14 +185,14 @@ public class MainPage extends javax.swing.JFrame {
         JFrame help = new JFrame("HELP");
         help.setSize(this.getWidth(), this.getHeight()/2);
         help.setVisible(true);
-        help.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        help.setDefaultCloseOperation(HIDE_ON_CLOSE);
         
         JPanel panel = new JPanel();
         panel.setBackground(Color.white);
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         //panel.setLayout(new GridLayout());
         
-        JLabel label = new JLabel("Instruction");
+        JLabel label = new JLabel("<html><div style=\"text-align: center;\">" + "Instructions" + "</html>");
         label.setHorizontalAlignment(SwingConstants.CENTER);
         
         String offline = "Offline Editing: You can write to the Textarea, and save it as a text file.";
