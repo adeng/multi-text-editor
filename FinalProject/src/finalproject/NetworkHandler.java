@@ -36,19 +36,19 @@ public class NetworkHandler {
     // Server constructor
     public NetworkHandler(int port) throws IOException {
         host = true;
-        
         sSock = new ServerSocket(port);
         System.out.println("Hosting on: " + sSock.getInetAddress().getHostAddress() + ":" + port);
         sock = sSock.accept();
+        System.out.println("Connected!");
         initIO();
     }
     
     // Client constructor
     public NetworkHandler(String ip, int port) throws IOException {
-        host = false;
+        host = false;   
         System.out.println("Connecting to: " + ip + ":" + port);
         sock = new Socket(ip, port);
-        System.out.println("Hosted!");
+        System.out.println("Connected!");
         initIO();
     }
     

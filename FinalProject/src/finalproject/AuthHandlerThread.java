@@ -50,6 +50,7 @@ public class AuthHandlerThread extends NetworkHandler implements Callable<Boolea
 
     @Override
     public Boolean call() throws Exception {
+        System.out.println("Waiting");
         Packet info;
         while (run) {
             try {
