@@ -39,12 +39,12 @@ public class AuthHandlerThread extends NetworkHandler implements Callable<Boolea
 
     // Auth method for client
     public void sendAuth(String pass) throws IOException {
-        oos.writeObject(new Packet("password", pass));
+        pw.println(new Packet("password", pass).toString());
     }
 
     public boolean receiveAuth(String pass) throws IOException {
         boolean auth = (this.pass.equals(pass));
-        oos.writeObject(new Packet("auth", Boolean.toString(auth)));
+        pw.println(new Packet("auth", Boolean.toString(auth)).toString());
         return auth;
     }
 
@@ -54,7 +54,9 @@ public class AuthHandlerThread extends NetworkHandler implements Callable<Boolea
         while (run) {
             try {
                 // Not currently authenticated; should run password loop
-                info = (Packet) ois.readObject();
+                String in = br.readLine();
+                System.out.println(in);
+                info = new Packet(in);
 
                 // Host should only end thread once authenticated
                 // Client will end thread on response; design to try again later

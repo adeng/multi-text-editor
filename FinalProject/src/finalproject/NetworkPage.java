@@ -15,6 +15,7 @@ import java.util.concurrent.Future;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -179,15 +180,20 @@ public class NetworkPage extends javax.swing.JFrame {
         service = Executors.newFixedThreadPool(1);
         try {
             final boolean auth;
-            JOptionPane.showMessageDialog(null, "Waiting for connection");
-
+            /*
+            WaitThread wt = new WaitThread();
+            Thread wait = new Thread(wt);
+            wait.start(); */
+            
             if (host) {
                 task = service.submit(new AuthHandlerThread(port, pass));
             } else {
                 task = service.submit(new AuthHandlerThread(ip, port, pass));
             }
-
-            auth = task.get();
+            
+            // wt.closeDialog();
+            
+            auth = task.get();            
 
             this.setVisible(false);
 
