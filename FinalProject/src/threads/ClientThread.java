@@ -45,8 +45,8 @@ public class ClientThread implements Runnable {
         sendPacket(new Packet("password", pass));
     }
     
-    public void sendPacket(Packet p) {
-        nh.getWriter().println(p.toString());
+    public void sendPacket(Packet p) throws IOException {
+        nh.getWriter().writeObject(p);
     }
 
     @Override
@@ -55,9 +55,7 @@ public class ClientThread implements Runnable {
         String in;
         try {
             while(!nh.authenticated) {
-                in = nh.getReader().readLine();
-                System.out.println(in);
-                info = new Packet(in);
+                info = (Packet) nh.getReader().readObject();
                 
                 if (info.getKey().equals("auth")) {
                     if (Boolean.parseBoolean(info.getValue())) {
