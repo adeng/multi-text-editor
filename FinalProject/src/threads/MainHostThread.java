@@ -56,7 +56,6 @@ public class MainHostThread implements Runnable {
                 Socket s = ss.accept();
                 NetworkHandler nh = new NetworkHandler(s);
                 MultiHostThread mht = new MultiHostThread(nh);
-                System.out.println(welcomePacket());
                 mht.addPacket(welcomePacket());
                 sockets.add(mht);
                 Thread n = new Thread(sockets.get(sockets.size()-1));
