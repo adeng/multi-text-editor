@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  *
@@ -29,7 +30,7 @@ public class NetworkHandler {
     protected InputStream is;
     protected InputStreamReader isr;
     protected BufferedReader br;
-
+    
     protected OutputStream os;
     protected PrintWriter pw;
     
@@ -79,6 +80,15 @@ public class NetworkHandler {
 
     public PrintWriter getWriter() {
         return pw;
+    }
+    
+    public Packet nextPacket() {
+        Scanner scan = new Scanner(isr).useDelimiter("\\0");
+        return new Packet(scan.next());
+    }
+    
+    public boolean hasNext() {
+        return new Scanner(isr).useDelimiter("\\0").hasNext();
     }
 
     public BufferedReader getReader() {

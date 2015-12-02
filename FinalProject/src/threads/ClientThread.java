@@ -55,9 +55,8 @@ public class ClientThread implements Runnable {
         String in;
         try {
             while(!nh.authenticated) {
-                in = nh.getReader().readLine();
-                System.out.println(in);
-                info = new Packet(in);
+                info = nh.nextPacket();
+                System.out.println(info);
                 
                 if (info.getKey().equals("auth")) {
                     if (Boolean.parseBoolean(info.getValue())) {
@@ -75,15 +74,13 @@ public class ClientThread implements Runnable {
                 }
                 
                 // Receive all packets
-                in = nh.getReader().readLine();
-                while(in != null) {
-                    info = new Packet(in);
+                while(nh.hasNext()) {
+                    info = nh.nextPacket();
                     switch(info.getKey()) {
                         case "init":
                             ep.setAllText(info.getValue());
                             break;
                     }
-                    in = nh.getReader().readLine();
                 }               
                 
                 try {
