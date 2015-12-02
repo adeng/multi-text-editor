@@ -190,7 +190,6 @@ public class MainPage extends javax.swing.JFrame {
         JPanel panel = new JPanel();
         panel.setBackground(Color.white);
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-        //panel.setLayout(new GridLayout());
         
         JLabel label = new JLabel("<html><div style=\"text-align: center;\">" + "Instructions" + "</html>");
         label.setHorizontalAlignment(SwingConstants.CENTER);

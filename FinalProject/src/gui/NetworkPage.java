@@ -129,7 +129,17 @@ public class NetworkPage extends javax.swing.JFrame {
 
         portField.setText("9286");
 
-        passField.setText("jTextField1");
+        passField.setText("Enter Password Here");
+        passField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                passFieldMouseClicked(evt);
+            }
+        });
+        passField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passFieldActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -275,6 +285,15 @@ public class NetworkPage extends javax.swing.JFrame {
 
         ipField.setText(ip);
     }//GEN-LAST:event_ipFieldMouseClicked
+
+    private void passFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passFieldActionPerformed
+
+    private void passFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passFieldMouseClicked
+        // TODO add your handling code here:
+        passField.setText("");
+    }//GEN-LAST:event_passFieldMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
