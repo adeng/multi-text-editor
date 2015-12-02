@@ -32,10 +32,13 @@ public class Packet implements Serializable {
     }
     
     public Packet(String json) {
-        String stripped = json.substring(1, json.length() - 1);
-        String[] comps = stripped.split(":");
-        key = comps[0];
-        value = comps.length == 0 ? "" : comps[1];
+        String stripped = json.trim().substring(1, json.length() - 1);
+        key = stripped.substring(0, stripped.indexOf(":"));
+        
+        if( stripped.indexOf(":") + 1 == stripped.length() - 1 )
+            value = "";
+        else
+            value = stripped.substring(stripped.indexOf(":") + 1, stripped.length());
     }
     
     public static boolean isPacket(String s) {
