@@ -5,6 +5,7 @@
  */
 package threads;
 
+import gui.EditorPage;
 import helpers.NetworkHandler;
 import helpers.Packet;
 import java.io.IOException;
@@ -15,11 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author alber
  */
-public class MultiHostThread implements Runnable {
-    NetworkHandler nh;
-    public static boolean run = true;
-    
-    Queue<Packet> sync;
+public class MultiHostThread extends Sendable implements Runnable {
 
     public MultiHostThread(NetworkHandler nh) throws IOException {
         this.nh = nh;
@@ -31,18 +28,6 @@ public class MultiHostThread implements Runnable {
         boolean auth = (MainHostThread.pass.equals(pass));
         sendPacket(new Packet("auth", Boolean.toString(auth)));
         return auth;
-    }
-    
-    public void addPacket(Packet p) {
-        sync.add(p);
-    }
-    
-    public void sendPacket(Packet p) {
-        nh.getWriter().println(p.toString());
-    }
-    
-    public String toString() {
-        return nh.toString();
     }
 
     @Override
@@ -82,5 +67,21 @@ public class MultiHostThread implements Runnable {
             System.out.println("Something went wrong :(");
             ex.printStackTrace();
         }
+    }
+
+    // Don't do anything
+    @Override
+    public void sendAuth(String pass) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setEditor(EditorPage ep) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void receiveAuth() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -17,14 +17,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author alber
  */
-public class ClientThread implements Runnable {
-    public static NetworkHandler nh;
-    private boolean authenticated = false;
-    private boolean run = true;
+public class ClientThread extends Sendable implements Runnable {
     EditorPage ep;
-    
-    private Queue<Packet> sync;
-    
+        
     // Server constructor
     public ClientThread(NetworkHandler nh) throws IOException {
         this.nh = nh;
@@ -36,17 +31,9 @@ public class ClientThread implements Runnable {
         this.ep = ep;
     }
     
-    public void addPacket(Packet p) {
-        sync.add(p);
-    }
-    
     // Auth method for client
     public void sendAuth(String pass) throws IOException {
         sendPacket(new Packet("password", pass));
-    }
-    
-    public void sendPacket(Packet p) {
-        nh.getWriter().println(p.toString());
     }
 
     @Override
@@ -97,5 +84,11 @@ public class ClientThread implements Runnable {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    // Don't do anything
+    @Override
+    public void receiveAuth() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

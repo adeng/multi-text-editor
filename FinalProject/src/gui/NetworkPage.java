@@ -208,11 +208,13 @@ public class NetworkPage extends javax.swing.JFrame {
                 thread = new Thread(run);
                 thread.start();
                 
-                new Thread(new ConnHostThread()).start();
+                ConnHostThread sender = new ConnHostThread();
+                new Thread().start();
                 
                 this.setVisible(false);
                 EditorPage ep = new EditorPage(true);
                 run.setEditor(ep);
+                ep.setSendable(sender);
                 ep.setVisible(true);
             } else {
                 ClientThread run = new ClientThread(new NetworkHandler(ip, port));
@@ -240,6 +242,7 @@ public class NetworkPage extends javax.swing.JFrame {
                 
                 JOptionPane.showMessageDialog(null, "Connected!");
                 this.setVisible(false);
+                ep.setSendable(run);
                 ep.setVisible(true);
             }
         } catch (ConnectException ex) {

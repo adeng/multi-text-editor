@@ -6,12 +6,14 @@
 package gui;
 
 
+import java.awt.Cursor;
 import threads.MainHostThread;
 import threads.ClientThread;
 import java.util.*;
 import javax.swing.*;
 import java.io.*;
 import java.net.*;
+import threads.Sendable;
 
 
 /**
@@ -20,13 +22,16 @@ import java.net.*;
  */
 public class EditorPage extends javax.swing.JFrame {
     protected Boolean checkSave = false;
+    protected boolean offline = false;
     protected File fileName;
+    protected Sendable thread;
     
     /**
      * Creates new form Main
      */
     public EditorPage() {
         initComponents();
+        offline = true;
     }
     
     public EditorPage(boolean host) throws UnknownHostException {
@@ -38,8 +43,12 @@ public class EditorPage extends javax.swing.JFrame {
                     + MainHostThread.pass);
         } else {
             connected.setText("You are currently connected to " + 
-                    ClientThread.nh.toString());
+                    thread.nh.toString());
         }
+    }
+    
+    public void setSendable(Sendable s) {
+        thread = s;
     }
     
     public String getAllText() {
@@ -82,6 +91,11 @@ public class EditorPage extends javax.swing.JFrame {
 
         textArea.setColumns(20);
         textArea.setRows(5);
+        textArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textAreaKeyTyped(evt);
+            }
+        });
         jScrollPane2.setViewportView(textArea);
 
         connected.setText("You are currently in OFFLINE mode.");
@@ -358,6 +372,13 @@ public class EditorPage extends javax.swing.JFrame {
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         textArea.copy();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void textAreaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textAreaKeyTyped
+        if(offline)
+            return;
+        
+        
+    }//GEN-LAST:event_textAreaKeyTyped
 
 
 
