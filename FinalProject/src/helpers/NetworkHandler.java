@@ -83,12 +83,12 @@ public class NetworkHandler {
     }
     
     public Packet nextPacket() {
-        Scanner scan = new Scanner(isr).useDelimiter("\\u0000");
+        Scanner scan = new Scanner(isr).useDelimiter("\\0");
         return new Packet(scan.next());
     }
     
     public boolean hasNext() {
-        return new Scanner(isr).useDelimiter("\\u0000").hasNext();
+        return new Scanner(isr).useDelimiter("\\0").hasNext();
     }
 
     public BufferedReader getReader() {

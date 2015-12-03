@@ -51,6 +51,6 @@ public class Packet implements Serializable {
     }
     
     public String toString() {
-        return "{" + key + ":" + value + "}" + '\u0000';
+        return "{" + key + ":" + value + "}\\0";
     }
 }
