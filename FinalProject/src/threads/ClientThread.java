@@ -52,9 +52,11 @@ public class ClientThread implements Runnable {
     @Override
     public void run() {
         Packet info;
+        String in;
         try {
             while(!nh.authenticated) {
                 info = nh.nextPacket();
+                System.out.println(info);
                 
                 if (info.getKey().equals("auth")) {
                     if (Boolean.parseBoolean(info.getValue())) {

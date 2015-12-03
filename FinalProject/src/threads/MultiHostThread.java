@@ -39,7 +39,6 @@ public class MultiHostThread implements Runnable {
     
     public void sendPacket(Packet p) {
         nh.getWriter().println(p.toString());
-        System.out.println(p.toString());
     }
     
     public String toString() {
@@ -49,10 +48,13 @@ public class MultiHostThread implements Runnable {
     @Override
     public void run() {
         Packet info;
+        String in;
         try {
             while(!nh.authenticated) {
                 // Not currently authenticated; should run password loop
-                info = nh.nextPacket();
+                in = nh.getReader().readLine();
+                System.out.println(in);
+                info = new Packet(in);
 
                 if (info.getKey().equals("password")) {
                     boolean auth = receiveAuth(info.getValue());
