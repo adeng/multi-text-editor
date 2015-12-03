@@ -31,8 +31,6 @@ public class NetworkHandler {
     protected InputStreamReader isr;
     protected BufferedReader br;
     
-    protected Scanner scan;
-    
     protected OutputStream os;
     protected PrintWriter pw;
     
@@ -65,8 +63,6 @@ public class NetworkHandler {
         is = sock.getInputStream();
         isr = new InputStreamReader(is);
         br = new BufferedReader(isr);
-        
-        Scanner scan = new Scanner(isr).useDelimiter("\\u0000");
 
         // Output Stream
         os = sock.getOutputStream();
@@ -87,11 +83,12 @@ public class NetworkHandler {
     }
     
     public Packet nextPacket() {
+        Scanner scan = new Scanner(isr).useDelimiter("\\u0000");
         return new Packet(scan.next());
     }
     
     public boolean hasNext() {
-        return scan.hasNext();
+        return new Scanner(isr).useDelimiter("\\u0000").hasNext();
     }
 
     public BufferedReader getReader() {
