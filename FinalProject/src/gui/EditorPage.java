@@ -34,8 +34,9 @@ public class EditorPage extends javax.swing.JFrame {
         offline = true;
     }
     
-    public EditorPage(boolean host) throws UnknownHostException {
+    public EditorPage(boolean host, Sendable s) throws UnknownHostException {
         this();
+        thread = s;
         if(host) {
             InetAddress ip = InetAddress.getLocalHost();
             connected.setText("You are currently hosting on " + ip.getHostAddress()
@@ -45,10 +46,6 @@ public class EditorPage extends javax.swing.JFrame {
             connected.setText("You are currently connected to " + 
                     thread.nh.toString());
         }
-    }
-    
-    public void setSendable(Sendable s) {
-        thread = s;
     }
     
     public String getAllText() {

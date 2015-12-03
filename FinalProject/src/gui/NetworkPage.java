@@ -212,13 +212,12 @@ public class NetworkPage extends javax.swing.JFrame {
                 new Thread().start();
                 
                 this.setVisible(false);
-                EditorPage ep = new EditorPage(true);
+                EditorPage ep = new EditorPage(true, sender);
                 run.setEditor(ep);
-                ep.setSendable(sender);
                 ep.setVisible(true);
             } else {
                 ClientThread run = new ClientThread(new NetworkHandler(ip, port));
-                EditorPage ep = new EditorPage(false);
+                EditorPage ep = new EditorPage(false, run);
                 run.setEditor(ep);
                 thread = new Thread(run);
                 thread.start();
@@ -242,7 +241,6 @@ public class NetworkPage extends javax.swing.JFrame {
                 
                 JOptionPane.showMessageDialog(null, "Connected!");
                 this.setVisible(false);
-                ep.setSendable(run);
                 ep.setVisible(true);
             }
         } catch (ConnectException ex) {
