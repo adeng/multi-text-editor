@@ -50,12 +50,9 @@ public class MultiHostThread extends Sendable implements Runnable {
                 }
             }
             
+            new Thread(new SendSyncThread(sync, this)).start();
+            
             while(run) {
-                // Send all packets
-                while(sync.size() > 0) {
-                    sendPacket(sync.remove());
-                }
-                
                 // Receive all packets
                 in = nh.getReader().readLine();
                 while(in != null) {

@@ -47,14 +47,11 @@ public class ClientThread extends Sendable implements Runnable {
                     }
                 }
             }
+           
+            new Thread(new SendSyncThread(sync, this)).start();
             
             // normal ops
-            while(run) {
-                // Send all packets
-                while(sync.size() > 0) {
-                    sendPacket(sync.remove());
-                }
-                
+            while(run) {                
                 // Receive all packets
                 in = nh.getReader().readLine();
                 while(in != null) {
