@@ -22,7 +22,7 @@ import threads.Sendable;
  */
 public class EditorPage extends javax.swing.JFrame {
     protected Boolean checkSave = false;
-    protected boolean offline = false;
+    protected boolean offline = true;
     protected File fileName;
     protected Sendable thread;
     
@@ -31,11 +31,11 @@ public class EditorPage extends javax.swing.JFrame {
      */
     public EditorPage() {
         initComponents();
-        offline = true;
     }
     
     public EditorPage(boolean host, Sendable s) throws UnknownHostException {
         this();
+        offline = false;
         thread = s;
         if(host) {
             InetAddress ip = InetAddress.getLocalHost();
@@ -378,7 +378,7 @@ public class EditorPage extends javax.swing.JFrame {
         if(offline)
             return;
         
-        thread.sendCharacter(evt.getKeyChar(), textArea.getCaretPosition() - 1);
+        thread.sendCharacter(evt.getKeyChar(), textArea.getCaretPosition());
     }//GEN-LAST:event_textAreaKeyTyped
 
 

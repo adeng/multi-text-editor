@@ -29,8 +29,10 @@ public class ConnHostThread extends Sendable implements Runnable {
     public void run() {
         while(run) {
             while(sync.size() > 0) {
+                Packet p = sync.remove();
+                System.out.println(p);
                 for(MultiHostThread mht : MainHostThread.sockets) {
-                    mht.sendPacket(sync.remove());
+                    mht.sendPacket(p);
                 }
             }
             

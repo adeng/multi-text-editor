@@ -27,6 +27,7 @@ public abstract class Sendable {
     }
     
     public void sendPacket(Packet p) {
+        System.out.println(p);
         nh.getWriter().println(p.toString());
     }
     

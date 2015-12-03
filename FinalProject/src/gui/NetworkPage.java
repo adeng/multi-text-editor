@@ -209,7 +209,7 @@ public class NetworkPage extends javax.swing.JFrame {
                 thread.start();
                 
                 ConnHostThread sender = new ConnHostThread();
-                new Thread().start();
+                new Thread(sender).start();
                 
                 this.setVisible(false);
                 EditorPage ep = new EditorPage(true, sender);
