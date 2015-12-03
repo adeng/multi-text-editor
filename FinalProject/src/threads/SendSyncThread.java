@@ -13,7 +13,7 @@ import java.util.Queue;
  * @author Albert
  */
 public class SendSyncThread implements Runnable {
-    public boolean run;
+    public boolean run = true;
     public Queue<Packet> sync;
     Sendable parent;
     
