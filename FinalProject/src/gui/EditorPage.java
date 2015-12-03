@@ -378,7 +378,7 @@ public class EditorPage extends javax.swing.JFrame {
         if(offline)
             return;
         
-        
+        thread.sendCharacter(evt.getKeyChar(), textArea.getCaretPosition() - 1);
     }//GEN-LAST:event_textAreaKeyTyped
 
 
