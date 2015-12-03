@@ -16,7 +16,7 @@ public class Packet implements Serializable {
     
     public Packet(String key, String value) {
         this.key = key;
-        this.value = value.replaceAll("\t", " ");
+        this.value = value.replaceAll("\0", "\n");
     }
     
     public Packet(String key, int value) {
@@ -39,6 +39,7 @@ public class Packet implements Serializable {
             value = "";
         else
             value = stripped.substring(stripped.indexOf(":") + 1, stripped.length());
+        value = value.replaceAll("\0", "\n");
     }
     
     public static boolean isPacket(String s) {
@@ -55,6 +56,6 @@ public class Packet implements Serializable {
     
     public String toString() {
         
-        return "{" + key + ":" + value.replaceAll(" ", "\t") + "}";
+        return "{" + key + ":" + value.replaceAll("\n", "\0") + "}";
     }
 }
