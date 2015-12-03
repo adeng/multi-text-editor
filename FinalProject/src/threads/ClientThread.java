@@ -79,7 +79,7 @@ public class ClientThread implements Runnable {
                 while(in != null) {
                     info = new Packet(in);
                     switch(info.getKey()) {
-                        case "init":
+                        case "init":                            
                             ep.setAllText(info.getValue());
                             break;
                     }
