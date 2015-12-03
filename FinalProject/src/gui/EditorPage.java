@@ -13,6 +13,8 @@ import java.util.*;
 import javax.swing.*;
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import threads.Sendable;
 
 
@@ -60,6 +62,11 @@ public class EditorPage extends javax.swing.JFrame {
         textArea.insert(s, pos);
     }
 
+    public void deleteChar(String s, int pos) {
+        textArea.select(pos, pos+1);
+        textArea.cut();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -74,11 +81,11 @@ public class EditorPage extends javax.swing.JFrame {
         connected = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
+        New = new javax.swing.JMenuItem();
+        Open = new javax.swing.JMenuItem();
         jMenuItem8 = new mySaveButton();
-        jMenuItem9 = new javax.swing.JMenuItem();
-        jMenuItem10 = new javax.swing.JMenuItem();
+        SaveAs = new javax.swing.JMenuItem();
+        Quit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -103,21 +110,21 @@ public class EditorPage extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
-        jMenuItem6.setText("New");
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+        New.setText("New");
+        New.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem6ActionPerformed(evt);
+                NewActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem6);
+        jMenu1.add(New);
 
-        jMenuItem7.setText("Open");
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+        Open.setText("Open");
+        Open.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
+                OpenActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem7);
+        jMenu1.add(Open);
 
         jMenuItem8.setText("Save");
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
@@ -127,23 +134,23 @@ public class EditorPage extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem8);
 
-        jMenuItem9.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem9.setText("Save As");
-        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+        SaveAs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        SaveAs.setText("Save As");
+        SaveAs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem9ActionPerformed(evt);
+                SaveAsActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem9);
+        jMenu1.add(SaveAs);
 
-        jMenuItem10.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem10.setText("Quit");
-        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+        Quit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        Quit.setText("Quit");
+        Quit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem10ActionPerformed(evt);
+                QuitActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem10);
+        jMenu1.add(Quit);
 
         jMenuBar1.add(jMenu1);
 
@@ -235,7 +242,7 @@ public class EditorPage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+    private void QuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitActionPerformed
         // TODO add your handling code here:
         if (checkSave == false){
             JOptionPane.showMessageDialog(null, "Please save first");
@@ -243,7 +250,7 @@ public class EditorPage extends javax.swing.JFrame {
         else{
         System.exit(0);
         }
-    }//GEN-LAST:event_jMenuItem10ActionPerformed
+    }//GEN-LAST:event_QuitActionPerformed
 
     private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
         // TODO add your handling code here:
@@ -266,8 +273,8 @@ public class EditorPage extends javax.swing.JFrame {
         BufferedWriter writer = null;
         
         try {
-        writer = new BufferedWriter(new FileWriter(fileName));
-        writer.write(textArea.getText());
+            writer = new BufferedWriter(new FileWriter(fileName));
+            writer.write(textArea.getText());
         } catch (IOException err) {
             err.printStackTrace();
         }
@@ -275,7 +282,7 @@ public class EditorPage extends javax.swing.JFrame {
             try {
                 writer.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_jMenuItem8ActionPerformed
@@ -286,14 +293,14 @@ public class EditorPage extends javax.swing.JFrame {
         info.setVisible(true);       
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+    private void NewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewActionPerformed
         // TODO add your handling code here:
         EditorPage newPage = new EditorPage();
         newPage.setVisible(true);
         newPage.setDefaultCloseOperation(HIDE_ON_CLOSE);
-    }//GEN-LAST:event_jMenuItem6ActionPerformed
+    }//GEN-LAST:event_NewActionPerformed
 
-    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+    private void SaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveAsActionPerformed
         // TODO add your handling code here:      
         final JFileChooser SaveAs = new JFileChooser();
         SaveAs.setApproveButtonText("Save As");
@@ -306,23 +313,23 @@ public class EditorPage extends javax.swing.JFrame {
         BufferedWriter outFile = null;
         
         try {
-         outFile = new BufferedWriter(new FileWriter(fileName));
-         textArea.write(outFile);   
-      } catch (IOException ex) {
-         ex.printStackTrace();
-      } finally {
-         if (outFile != null) {
-            try {
-               outFile.close();
-            } catch (IOException e) {
-            }
+            outFile = new BufferedWriter(new FileWriter(fileName));
+            textArea.write(outFile);   
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } 
+        finally {
+            if (outFile != null) {
+                try {
+                    outFile.close();
+                }catch (IOException e) {}
          }
       }
         checkSave = true;
         jMenuItem8.setEnabled(checkSave);
-    }//GEN-LAST:event_jMenuItem9ActionPerformed
+    }//GEN-LAST:event_SaveAsActionPerformed
 
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+    private void OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenActionPerformed
         // TODO add your handling code here:
         try{
             JFileChooser loadEmp = new JFileChooser();
@@ -348,12 +355,8 @@ public class EditorPage extends javax.swing.JFrame {
         catch(IOException ex){
             textArea.append("Error Processing File:\n" + ex.getMessage()+"\n");
         }
-        catch(NullPointerException ex)
-        {
-            textArea.append("Open File Cancelled:\n" + ex.getMessage()+"\n");
-        }
-        checkSave = true;
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
+        catch(NullPointerException ex){}
+    }//GEN-LAST:event_OpenActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
         // TODO add your handling code here:
@@ -382,24 +385,23 @@ public class EditorPage extends javax.swing.JFrame {
     }//GEN-LAST:event_textAreaKeyTyped
 
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem New;
+    private javax.swing.JMenuItem Open;
+    private javax.swing.JMenuItem Quit;
+    private javax.swing.JMenuItem SaveAs;
     private javax.swing.JLabel connected;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
-    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea textArea;
     // End of variables declaration//GEN-END:variables

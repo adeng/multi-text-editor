@@ -39,7 +39,7 @@ public abstract class Sendable {
         sync.add(p);
     }
     
-    public void processPacketData(Packet info) {
+    public void processPacketData(Packet info){
         switch(info.getKey()) {
             // Initialization
             case "init":                            
@@ -50,6 +50,7 @@ public abstract class Sendable {
                 String val = info.getValue();
                 int pos = Integer.parseInt(val.substring(0, val.indexOf(":")));
                 String s = val.substring(val.indexOf(":") + 1, val.length());
+                if (s.equals("\b")) ep.deleteChar(s, pos);
                 ep.insertChar(s, pos);
                 break;
         }
