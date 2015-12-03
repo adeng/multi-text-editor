@@ -58,6 +58,10 @@ public class EditorPage extends javax.swing.JFrame {
     public void setAllText(String s) {
         textArea.setText(s);
     }
+    
+    public void insertChar(String s, int pos) {
+        textArea.insert(s, pos);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

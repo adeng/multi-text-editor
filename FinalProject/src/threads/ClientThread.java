@@ -17,18 +17,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author alber
  */
-public class ClientThread extends Sendable implements Runnable {
-    EditorPage ep;
-        
+public class ClientThread extends Sendable implements Runnable {        
     // Server constructor
     public ClientThread(NetworkHandler nh) throws IOException {
         this.nh = nh;
         
         sync = new ConcurrentLinkedQueue<Packet>();
-    }
-    
-    public void setEditor(EditorPage ep) {
-        this.ep = ep;
     }
     
     // Auth method for client
@@ -65,11 +59,7 @@ public class ClientThread extends Sendable implements Runnable {
                 in = nh.getReader().readLine();
                 while(in != null) {
                     info = new Packet(in);
-                    switch(info.getKey()) {
-                        case "init":                            
-                            ep.setAllText(info.getValue());
-                            break;
-                    }
+                    processPacketData(info);
                     in = nh.getReader().readLine();
                 }               
                 

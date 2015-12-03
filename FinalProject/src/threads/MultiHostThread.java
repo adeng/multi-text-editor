@@ -51,9 +51,18 @@ public class MultiHostThread extends Sendable implements Runnable {
             }
             
             while(run) {
+                // Send all packets
                 while(sync.size() > 0) {
                     sendPacket(sync.remove());
                 }
+                
+                // Receive all packets
+                in = nh.getReader().readLine();
+                while(in != null) {
+                    info = new Packet(in);
+                    processPacketData(info);
+                    in = nh.getReader().readLine();
+                }               
                 
                 try {
                     Thread.sleep(100);
@@ -72,11 +81,6 @@ public class MultiHostThread extends Sendable implements Runnable {
     // Don't do anything
     @Override
     public void sendAuth(String pass) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setEditor(EditorPage ep) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

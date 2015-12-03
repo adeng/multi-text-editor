@@ -16,17 +16,42 @@ import java.util.Queue;
  * @author alber
  */
 public abstract class Sendable {
+    public EditorPage ep;
     public NetworkHandler nh;
     public static boolean run = true;
     
     protected Queue<Packet> sync;
     
+    public void sendCharacter(char c, int position) {
+        sync.add(new Packet("keystroke", position + ":" + c));
+    }
+    
     public void sendPacket(Packet p) {
         nh.getWriter().println(p.toString());
     }
     
+    public void setEditor(EditorPage ep) {
+        this.ep = ep;
+    }
+    
     public void addPacket(Packet p) {
         sync.add(p);
+    }
+    
+    public void processPacketData(Packet info) {
+        switch(info.getKey()) {
+            // Initialization
+            case "init":                            
+                ep.setAllText(info.getValue());
+                break;
+
+            case "keystroke":
+                String val = info.getValue();
+                int pos = Integer.parseInt(val.substring(0, val.indexOf(":")));
+                String s = val.substring(val.indexOf(":") + 1, val.length());
+                ep.insertChar(s, pos);
+                break;
+        }
     }
     
     public String toString() {
@@ -34,8 +59,7 @@ public abstract class Sendable {
     }
     
     // Client Thread
-    public abstract void sendAuth(String pass) throws IOException;   
-    public abstract void setEditor(EditorPage ep);
+    public abstract void sendAuth(String pass) throws IOException;
     
     // MultiHost Thread
     public abstract void receiveAuth();

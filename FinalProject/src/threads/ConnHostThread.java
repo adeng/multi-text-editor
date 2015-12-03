@@ -49,11 +49,6 @@ public class ConnHostThread extends Sendable implements Runnable {
     }
 
     @Override
-    public void setEditor(EditorPage ep) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void receiveAuth() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
