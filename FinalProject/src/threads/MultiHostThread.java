@@ -37,8 +37,9 @@ public class MultiHostThread implements Runnable {
         sync.add(p);
     }
     
-    public void sendPacket(Packet p) throws IOException {
-        nh.getWriter().writeObject(p);
+    public void sendPacket(Packet p) {
+        nh.getWriter().println(p.toString());
+        System.out.println(p.toString());
     }
     
     public String toString() {
@@ -51,7 +52,7 @@ public class MultiHostThread implements Runnable {
         try {
             while(!nh.authenticated) {
                 // Not currently authenticated; should run password loop
-                info = (Packet) nh.getReader().readObject();
+                info = nh.nextPacket();
 
                 if (info.getKey().equals("password")) {
                     boolean auth = receiveAuth(info.getValue());
