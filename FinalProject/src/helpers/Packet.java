@@ -12,11 +12,11 @@ import java.io.Serializable;
  * @author alber
  */
 public class Packet implements Serializable {
-    String key, value;
+    String[] data;
     
     public Packet(String key, String value) {
-        this.key = key;
-        this.value = value;
+        data[0] = key;
+        data[1] = value;
     }
     
     public Packet(String key, int value) {
@@ -33,12 +33,12 @@ public class Packet implements Serializable {
     
     public Packet(String json) {
         String stripped = json.trim().substring(1, json.length() - 1);
-        key = stripped.substring(0, stripped.indexOf(":"));
+        data[0] = stripped.substring(0, stripped.indexOf(":"));
         
         if( stripped.indexOf(":") + 1 == stripped.length() - 1 )
-            value = "";
+            data[1] = "";
         else
-            value = stripped.substring(stripped.indexOf(":") + 1, stripped.length());
+            data[1] = stripped.substring(stripped.indexOf(":") + 1, stripped.length());
     }
     
     public static boolean isPacket(String s) {
@@ -46,14 +46,14 @@ public class Packet implements Serializable {
     }
     
     public String getKey() {
-        return key;
+        return data[0];
     }
     
     public String getValue() {
-        return value;
+        return data[1];
     }
     
     public String toString() {
-        return "{" + key + ":" + value + "}" + '\u0000';
+        return "{" + data[0] + ":" + data[1] + "}";
     }
 }

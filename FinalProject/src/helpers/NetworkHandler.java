@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -30,11 +32,13 @@ public class NetworkHandler {
     protected InputStream is;
     protected InputStreamReader isr;
     protected BufferedReader br;
+    protected ObjectInputStream ois;
     
     protected Scanner scan;
     
     protected OutputStream os;
     protected PrintWriter pw;
+    protected ObjectOutputStream oos;
     
     public static String ip;
     public static int port;
@@ -65,8 +69,6 @@ public class NetworkHandler {
         is = sock.getInputStream();
         isr = new InputStreamReader(is);
         br = new BufferedReader(isr);
-        
-        Scanner scan = new Scanner(isr).useDelimiter("\\u0000");
 
         // Output Stream
         os = sock.getOutputStream();
@@ -82,20 +84,12 @@ public class NetworkHandler {
         }
     }
 
-    public PrintWriter getWriter() {
-        return pw;
-    }
-    
-    public Packet nextPacket() {
-        return new Packet(scan.next());
-    }
-    
-    public boolean hasNext() {
-        return scan.hasNext();
+    public ObjectOutputStream getWriter() {
+        return oos;
     }
 
-    public BufferedReader getReader() {
-        return br;
+    public ObjectInputStream getReader() {
+        return ois;
     }
 
     public boolean isHost() {
