@@ -16,7 +16,7 @@ public class Packet implements Serializable {
     
     public Packet(String key, String value) {
         this.key = key;
-        this.value = value;
+        this.value = value.replaceAll("\t", " ");
     }
     
     public Packet(String key, int value) {
@@ -54,6 +54,7 @@ public class Packet implements Serializable {
     }
     
     public String toString() {
-        return "{" + key + ":" + value + "}";
+        
+        return "{" + key + ":" + value.replaceAll(" ", "\t") + "}";
     }
 }
