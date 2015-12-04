@@ -7,6 +7,10 @@ package gui;
 
 
 import java.awt.Cursor;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import threads.MainHostThread;
 import threads.ClientThread;
 import java.util.*;
@@ -65,6 +69,11 @@ public class EditorPage extends javax.swing.JFrame {
     public void deleteChar(String s, int pos) {
         textArea.select(pos, pos+1);
         textArea.cut();
+    }
+    
+    public void paste (String s, int pos) throws UnsupportedFlavorException, IOException{
+        textArea.select(pos, pos-s.length());
+        textArea.paste();
     }
     
     /**
@@ -332,12 +341,12 @@ public class EditorPage extends javax.swing.JFrame {
     private void OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenActionPerformed
         // TODO add your handling code here:
         try{
-            JFileChooser loadEmp = new JFileChooser();
+            JFileChooser load = new JFileChooser();
             File selectedFile;
             BufferedReader in;
             FileReader reader = null;
-            if (loadEmp.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){
-                selectedFile = loadEmp.getSelectedFile();
+            if (load.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){
+                selectedFile = load.getSelectedFile();
                 if (selectedFile.canRead() && selectedFile.exists()){
                     reader = new FileReader(selectedFile);
                 }
@@ -346,7 +355,7 @@ public class EditorPage extends javax.swing.JFrame {
             
             String inputLine = in.readLine();
             while(inputLine!=null){
-                StringTokenizer tokenizer = new StringTokenizer(inputLine);
+                Scanner sc = new Scanner(inputLine);
                 textArea.append(inputLine+"\n");
                 inputLine = in.readLine();
             }
@@ -356,6 +365,7 @@ public class EditorPage extends javax.swing.JFrame {
             textArea.append("Error Processing File:\n" + ex.getMessage()+"\n");
         }
         catch(NullPointerException ex){}
+        checkSave = true;
     }//GEN-LAST:event_OpenActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
@@ -403,6 +413,6 @@ public class EditorPage extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea textArea;
+    public javax.swing.JTextArea textArea;
     // End of variables declaration//GEN-END:variables
 }

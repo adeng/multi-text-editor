@@ -15,7 +15,7 @@ public class Packet implements Serializable {
     String key, value;
     
     public Packet(String key, String value) {
-        this.key = key;
+        this.key = key; 
         this.value = value.replaceAll("\0", "\n");
     }
     

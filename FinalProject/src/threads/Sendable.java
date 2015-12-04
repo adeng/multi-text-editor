@@ -8,6 +8,9 @@ package threads;
 import gui.EditorPage;
 import helpers.NetworkHandler;
 import helpers.Packet;
+import java.awt.Toolkit;
+import java.awt.datatransfer.*;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Queue;
 
@@ -26,6 +29,10 @@ public abstract class Sendable {
         sync.add(new Packet("keystroke", position + ":" + c));
     }
     
+    public void pasteCharacter(char c, int position) {
+        sync.add(new Packet("paste", position + ":" + c));
+    }
+    
     public void sendPacket(Packet p) {
         System.out.println(p);
         nh.getWriter().println(p.toString());
@@ -39,7 +46,7 @@ public abstract class Sendable {
         sync.add(p);
     }
     
-    public void processPacketData(Packet info){
+    public void processPacketData(Packet info) throws UnsupportedFlavorException, IOException{
         switch(info.getKey()) {
             // Initialization
             case "init":                            
@@ -52,6 +59,14 @@ public abstract class Sendable {
                 String s = val.substring(val.indexOf(":") + 1, val.length());
                 if (s.equals("\b")) ep.deleteChar(s, pos);
                 ep.insertChar(s, pos);
+                break;
+            
+            case "paste":
+                val = info.getValue();
+                pos = Integer.parseInt(val.substring(0, val.indexOf(":")));
+                Clipboard c=Toolkit.getDefaultToolkit().getSystemClipboard();
+                s= (String) c.getData(DataFlavor.imageFlavor);
+                ep.paste(s, pos);
                 break;
         }
     }
