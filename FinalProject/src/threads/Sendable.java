@@ -13,6 +13,7 @@ import java.awt.datatransfer.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Queue;
+import javax.swing.text.BadLocationException;
 
 /**
  *
@@ -29,8 +30,8 @@ public abstract class Sendable {
         sync.add(new Packet("keystroke", position + ":" + c));
     }
     
-    public void pasteCharacter(char c, int position) {
-        sync.add(new Packet("paste", position + ":" + c));
+    public void sendText(String s, int position) {
+        sync.add(new Packet("paste", position + ":" + s));
     }
     
     public void sendPacket(Packet p) {
@@ -46,7 +47,7 @@ public abstract class Sendable {
         sync.add(p);
     }
     
-    public void processPacketData(Packet info) throws UnsupportedFlavorException, IOException{
+    public void processPacketData(Packet info) throws Exception{
         switch(info.getKey()) {
             // Initialization
             case "init":                            
@@ -57,16 +58,16 @@ public abstract class Sendable {
                 String val = info.getValue();
                 int pos = Integer.parseInt(val.substring(0, val.indexOf(":")));
                 String s = val.substring(val.indexOf(":") + 1, val.length());
-                if (s.equals("\b")) ep.deleteChar(s, pos);
-                ep.insertChar(s, pos);
+                if (s.equals("\b")) 
+                    ep.deleteChar(pos);
+                ep.insertText(s, pos);
                 break;
             
             case "paste":
                 val = info.getValue();
                 pos = Integer.parseInt(val.substring(0, val.indexOf(":")));
-                Clipboard c=Toolkit.getDefaultToolkit().getSystemClipboard();
-                s= (String) c.getData(DataFlavor.imageFlavor);
-                ep.paste(s, pos);
+                s = val.substring(val.indexOf(":") + 1, val.length());
+                ep.insertText(s, pos);
                 break;
         }
     }

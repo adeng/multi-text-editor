@@ -19,6 +19,7 @@ import java.io.*;
 import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.text.BadLocationException;
 import threads.Sendable;
 
 
@@ -62,13 +63,13 @@ public class EditorPage extends javax.swing.JFrame {
         textArea.setText(s);
     }
     
-    public void insertChar(String s, int pos) {
+    public void insertText(String s, int pos) {
         textArea.insert(s, pos);
     }
 
-    public void deleteChar(String s, int pos) {
-        textArea.select(pos, pos+1);
-        textArea.cut();
+    public void deleteChar(int pos) throws BadLocationException {
+        String s = textArea.getText();
+        textArea.setText(s.substring(0, pos) + s.substring(pos + 1, s.length()));
     }
     
     public void paste (String s, int pos) throws UnsupportedFlavorException, IOException{
@@ -375,7 +376,23 @@ public class EditorPage extends javax.swing.JFrame {
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
+        int pos = textArea.getCaretPosition();
         textArea.paste();
+        
+        if(offline)
+            return;
+        
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Clipboard cp = tk.getSystemClipboard();
+        
+        try {
+            String s = (String) cp.getData(DataFlavor.stringFlavor);
+            thread.sendText(s, pos);
+        } catch (UnsupportedFlavorException ex) {
+            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
