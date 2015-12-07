@@ -78,6 +78,18 @@ public class EditorPage extends javax.swing.JFrame {
         textArea.paste();
     }
     
+    public void sendPaste(int pos) {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Clipboard cp = tk.getSystemClipboard();
+        
+        try {
+            String s = (String) cp.getData(DataFlavor.stringFlavor);
+            thread.sendText(s, pos);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -386,17 +398,7 @@ public class EditorPage extends javax.swing.JFrame {
         if(offline)
             return;
         
-        Toolkit tk = Toolkit.getDefaultToolkit();
-        Clipboard cp = tk.getSystemClipboard();
-        
-        try {
-            String s = (String) cp.getData(DataFlavor.stringFlavor);
-            thread.sendText(s, pos);
-        } catch (UnsupportedFlavorException ex) {
-            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        sendPaste(pos);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -409,18 +411,30 @@ public class EditorPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void textAreaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textAreaKeyTyped
+        // Sends character data; this is used instead of keyReleased because
+        // keyReleased does not properly send the CaretPosition
         if(offline)
             return;
         
         int ascii_code = (int) evt.getKeyChar();
         
-        if(ascii_code >= 32 && ascii_code <= 126)
+        if(ascii_code >= 32 && ascii_code <= 126 || ascii_code == 10)
             thread.sendCharacter(evt.getKeyChar(), textArea.getCaretPosition());
     }//GEN-LAST:event_textAreaKeyTyped
 
     private void textAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textAreaKeyReleased
+        // Keyboard shortcuts and backspace commands are here because KeyTyped
+        // only sends character data; it does NOT record what key is actually
+        // pressed.
+        if(offline)
+            return;
+        
+        System.out.println("Shortcut: " + evt.isControlDown() + " " + evt.getKeyCode());
+        
         if( evt.getKeyCode() == KeyEvent.VK_BACK_SPACE )
             thread.sendBackspace(textArea.getCaretPosition());
+        else if( evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_V )
+            sendPaste(textArea.getCaretPosition());
     }//GEN-LAST:event_textAreaKeyReleased
 
 
