@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.KeyEvent;
 import threads.MainHostThread;
 import threads.ClientThread;
 import java.util.*;
@@ -110,6 +111,9 @@ public class EditorPage extends javax.swing.JFrame {
         textArea.setColumns(20);
         textArea.setRows(5);
         textArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                textAreaKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 textAreaKeyTyped(evt);
             }
@@ -408,8 +412,16 @@ public class EditorPage extends javax.swing.JFrame {
         if(offline)
             return;
         
-        thread.sendCharacter(evt.getKeyChar(), textArea.getCaretPosition());
+        int ascii_code = (int) evt.getKeyChar();
+        
+        if(ascii_code >= 32 && ascii_code <= 126)
+            thread.sendCharacter(evt.getKeyChar(), textArea.getCaretPosition());
     }//GEN-LAST:event_textAreaKeyTyped
+
+    private void textAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textAreaKeyReleased
+        if( evt.getKeyCode() == KeyEvent.VK_BACK_SPACE )
+            thread.sendBackspace(textArea.getCaretPosition());
+    }//GEN-LAST:event_textAreaKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

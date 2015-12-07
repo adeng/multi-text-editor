@@ -30,6 +30,10 @@ public abstract class Sendable {
         sync.add(new Packet("keystroke", position + ":" + c));
     }
     
+    public void sendBackspace(int position) {
+        sync.add(new Packet("backspace", position));
+    }
+    
     public void sendText(String s, int position) {
         sync.add(new Packet("paste", position + ":" + s));
     }
@@ -48,6 +52,8 @@ public abstract class Sendable {
     }
     
     public void processPacketData(Packet info) throws Exception{
+        String val = info.getValue();
+        int pos;
         switch(info.getKey()) {
             // Initialization
             case "init":                            
@@ -55,18 +61,20 @@ public abstract class Sendable {
                 break;
 
             case "keystroke":
-                String val = info.getValue();
-                int pos = Integer.parseInt(val.substring(0, val.indexOf(":")));
+                pos = Integer.parseInt(val.substring(0, val.indexOf(":")));
                 String s = val.substring(val.indexOf(":") + 1, val.length());
-                if (s.equals("\b")) 
-                    ep.deleteChar(pos);
                 ep.insertText(s, pos);
+                break;
+                
+            case "backspace":
+                ep.deleteChar(Integer.parseInt(val));
                 break;
             
             case "paste":
-                val = info.getValue();
                 pos = Integer.parseInt(val.substring(0, val.indexOf(":")));
                 s = val.substring(val.indexOf(":") + 1, val.length());
+                System.out.println("Position: " + pos);
+                System.out.println("String: " + s);
                 ep.insertText(s, pos);
                 break;
         }

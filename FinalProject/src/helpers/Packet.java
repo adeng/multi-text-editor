@@ -35,7 +35,7 @@ public class Packet implements Serializable {
         String stripped = json.substring(1, json.length() - 1);
         key = stripped.substring(0, stripped.indexOf(":"));
         
-        if(stripped.indexOf(":") + 1 == stripped.length() - 1)
+        if(stripped.indexOf(":") + 1 == stripped.length())
             value = "";
         else
             value = stripped.substring(stripped.indexOf(":") + 1, stripped.length());
