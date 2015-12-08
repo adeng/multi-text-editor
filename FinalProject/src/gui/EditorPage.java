@@ -130,6 +130,11 @@ public class EditorPage extends javax.swing.JFrame {
                 textAreaCaretUpdate(evt);
             }
         });
+        textArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                textAreaMouseClicked(evt);
+            }
+        });
         textArea.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 textAreaKeyReleased(evt);
@@ -393,7 +398,13 @@ public class EditorPage extends javax.swing.JFrame {
         int ascii_code = (int) evt.getKeyChar();
 
         if (ascii_code >= 32 && ascii_code <= 126 || ascii_code == 10) {
-            thread.sendCharacter(evt.getKeyChar(), textArea.getCaretPosition());
+            if(selected) {
+                thread.sendBackspace(start, end);
+                thread.sendCharacter(evt.getKeyChar(), start);
+                selected = false;
+            }
+            else
+                thread.sendCharacter(evt.getKeyChar(), textArea.getCaretPosition());
         }
     }//GEN-LAST:event_textAreaKeyTyped
 
@@ -415,18 +426,22 @@ public class EditorPage extends javax.swing.JFrame {
         }
         else if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_V)
             sendPaste(textArea.getCaretPosition());
-        else if (!(evt.isActionKey() || evt.getKeyCode() == 16))
-            // 16 represents the shift key
+        else if (!evt.isShiftDown() && evt.isActionKey())
             selected = false;
     }//GEN-LAST:event_textAreaKeyReleased
 
     private void textAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_textAreaCaretUpdate
         if(evt.getMark() != evt.getDot()) {
             selected = true;
-            end = evt.getMark();
-            start = evt.getDot();
+            end = Math.max(evt.getDot(), evt.getMark());
+            start = Math.min(evt.getDot(), evt.getMark());
         }
     }//GEN-LAST:event_textAreaCaretUpdate
+
+    private void textAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textAreaMouseClicked
+        if(!evt.isShiftDown())
+            selected = false;
+    }//GEN-LAST:event_textAreaMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
