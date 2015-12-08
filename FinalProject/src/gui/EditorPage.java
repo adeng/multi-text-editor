@@ -5,7 +5,6 @@
  */
 package gui;
 
-
 import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -23,47 +22,49 @@ import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
 import threads.Sendable;
 
-
 /**
  *
  * @author alber
  */
 public class EditorPage extends javax.swing.JFrame {
+
     protected Boolean checkSave = false;
     protected boolean offline = true;
     protected File fileName;
     protected Sendable thread;
-    
+    protected int start, end;
+    protected boolean selected = false;
+
     /**
      * Creates new form Main
      */
     public EditorPage() {
         initComponents();
     }
-    
+
     public EditorPage(boolean host, Sendable s) throws UnknownHostException {
         this();
         offline = false;
         thread = s;
-        if(host) {
+        if (host) {
             InetAddress ip = InetAddress.getLocalHost();
             connected.setText("You are currently hosting on " + ip.getHostAddress()
-                    + ":" + MainHostThread.port + " with the password " 
+                    + ":" + MainHostThread.port + " with the password "
                     + MainHostThread.pass);
         } else {
-            connected.setText("You are currently connected to " + 
-                    thread.nh.toString());
+            connected.setText("You are currently connected to "
+                    + thread.nh.toString());
         }
     }
-    
+
     public String getAllText() {
         return textArea.getText();
     }
-    
+
     public void setAllText(String s) {
         textArea.setText(s);
     }
-    
+
     public void insertText(String s, int pos) {
         textArea.insert(s, pos);
     }
@@ -73,15 +74,20 @@ public class EditorPage extends javax.swing.JFrame {
         textArea.setText(s.substring(0, pos) + s.substring(pos + 1, s.length()));
     }
     
-    public void paste (String s, int pos) throws UnsupportedFlavorException, IOException{
-        textArea.select(pos, pos-s.length());
+    public void deleteSelection(int start, int end) {
+        String s = textArea.getText();
+        textArea.setText(s.substring(0, start) + s.substring(end, s.length()));
+    }
+
+    public void paste(String s, int pos) throws UnsupportedFlavorException, IOException {
+        textArea.select(pos, pos - s.length());
         textArea.paste();
     }
-    
+
     public void sendPaste(int pos) {
         Toolkit tk = Toolkit.getDefaultToolkit();
         Clipboard cp = tk.getSystemClipboard();
-        
+
         try {
             String s = (String) cp.getData(DataFlavor.stringFlavor);
             thread.sendText(s, pos);
@@ -89,7 +95,7 @@ public class EditorPage extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -114,14 +120,16 @@ public class EditorPage extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         textArea.setColumns(20);
         textArea.setRows(5);
+        textArea.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                textAreaCaretUpdate(evt);
+            }
+        });
         textArea.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 textAreaKeyReleased(evt);
@@ -220,26 +228,6 @@ public class EditorPage extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Connect");
-        jMenu3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu3ActionPerformed(evt);
-            }
-        });
-
-        jMenuItem2.setText("Host Info");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem2);
-
-        jMenuItem1.setText("Connect To");
-        jMenu3.add(jMenuItem1);
-
-        jMenuBar1.add(jMenu3);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -270,41 +258,32 @@ public class EditorPage extends javax.swing.JFrame {
 
     private void QuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitActionPerformed
         // TODO add your handling code here:
-        if (checkSave == false){
+        if (checkSave == false) {
             JOptionPane.showMessageDialog(null, "Please save first");
-        }
-        else{
-        System.exit(0);
+        } else {
+            System.exit(0);
         }
     }//GEN-LAST:event_QuitActionPerformed
 
-    private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jMenu3ActionPerformed
+    class mySaveButton extends JMenuItem {
 
-    
-    
-    class mySaveButton extends JMenuItem{       
-        public mySaveButton(){
+        public mySaveButton() {
             this.setEnabled(checkSave);
         }
     }
-    
 
-    
+
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         // TODO add your handling code here:
 
         BufferedWriter writer = null;
-        
+
         try {
             writer = new BufferedWriter(new FileWriter(fileName));
             writer.write(textArea.getText());
         } catch (IOException err) {
             err.printStackTrace();
-        }
-        finally{
+        } finally {
             try {
                 writer.close();
             } catch (IOException ex) {
@@ -312,12 +291,6 @@ public class EditorPage extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jMenuItem8ActionPerformed
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-        NetworkPage info = new NetworkPage();
-        info.setVisible(true);       
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void NewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewActionPerformed
         // TODO add your handling code here:
@@ -337,51 +310,50 @@ public class EditorPage extends javax.swing.JFrame {
 
         fileName = new File(SaveAs.getSelectedFile() + ".txt");
         BufferedWriter outFile = null;
-        
+
         try {
             outFile = new BufferedWriter(new FileWriter(fileName));
-            textArea.write(outFile);   
+            textArea.write(outFile);
         } catch (IOException ex) {
             ex.printStackTrace();
-        } 
-        finally {
+        } finally {
             if (outFile != null) {
                 try {
                     outFile.close();
-                }catch (IOException e) {}
-         }
-      }
+                } catch (IOException e) {
+                }
+            }
+        }
         checkSave = true;
         jMenuItem8.setEnabled(checkSave);
     }//GEN-LAST:event_SaveAsActionPerformed
 
     private void OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenActionPerformed
         // TODO add your handling code here:
-        try{
+        try {
             JFileChooser load = new JFileChooser();
             File selectedFile;
             BufferedReader in;
             FileReader reader = null;
-            if (load.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){
+            if (load.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 selectedFile = load.getSelectedFile();
-                if (selectedFile.canRead() && selectedFile.exists()){
+                if (selectedFile.canRead() && selectedFile.exists()) {
                     reader = new FileReader(selectedFile);
                 }
             }
             in = new BufferedReader(reader);
-            
+
             String inputLine = in.readLine();
-            while(inputLine!=null){
+            while (inputLine != null) {
                 Scanner sc = new Scanner(inputLine);
-                textArea.append(inputLine+"\n");
+                textArea.append(inputLine + "\n");
                 inputLine = in.readLine();
             }
             in.close();
+        } catch (IOException ex) {
+            textArea.append("Error Processing File:\n" + ex.getMessage() + "\n");
+        } catch (NullPointerException ex) {
         }
-        catch(IOException ex){
-            textArea.append("Error Processing File:\n" + ex.getMessage()+"\n");
-        }
-        catch(NullPointerException ex){}
         checkSave = true;
     }//GEN-LAST:event_OpenActionPerformed
 
@@ -394,10 +366,11 @@ public class EditorPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         int pos = textArea.getCaretPosition();
         textArea.paste();
-        
-        if(offline)
+
+        if (offline) {
             return;
-        
+        }
+
         sendPaste(pos);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
@@ -413,29 +386,47 @@ public class EditorPage extends javax.swing.JFrame {
     private void textAreaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textAreaKeyTyped
         // Sends character data; this is used instead of keyReleased because
         // keyReleased does not properly send the CaretPosition
-        if(offline)
+        if (offline) {
             return;
-        
+        }
+
         int ascii_code = (int) evt.getKeyChar();
-        
-        if(ascii_code >= 32 && ascii_code <= 126 || ascii_code == 10)
+
+        if (ascii_code >= 32 && ascii_code <= 126 || ascii_code == 10) {
             thread.sendCharacter(evt.getKeyChar(), textArea.getCaretPosition());
+        }
     }//GEN-LAST:event_textAreaKeyTyped
 
     private void textAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textAreaKeyReleased
         // Keyboard shortcuts and backspace commands are here because KeyTyped
         // only sends character data; it does NOT record what key is actually
         // pressed.
-        if(offline)
+        if (offline) {
             return;
-        
-        System.out.println("Shortcut: " + evt.isControlDown() + " " + evt.getKeyCode());
-        
-        if( evt.getKeyCode() == KeyEvent.VK_BACK_SPACE )
-            thread.sendBackspace(textArea.getCaretPosition());
-        else if( evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_V )
+        }
+
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            if(selected) {
+                thread.sendBackspace(start, end);
+                selected = false;
+            }
+            else
+                thread.sendBackspace(textArea.getCaretPosition());
+        }
+        else if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_V)
             sendPaste(textArea.getCaretPosition());
+        else if (!(evt.isActionKey() || evt.getKeyCode() == 16))
+            // 16 represents the shift key
+            selected = false;
     }//GEN-LAST:event_textAreaKeyReleased
+
+    private void textAreaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_textAreaCaretUpdate
+        if(evt.getMark() != evt.getDot()) {
+            selected = true;
+            end = evt.getMark();
+            start = evt.getDot();
+        }
+    }//GEN-LAST:event_textAreaCaretUpdate
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -446,11 +437,8 @@ public class EditorPage extends javax.swing.JFrame {
     private javax.swing.JLabel connected;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem11;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;

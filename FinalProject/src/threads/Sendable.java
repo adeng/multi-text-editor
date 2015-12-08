@@ -34,6 +34,10 @@ public abstract class Sendable {
         sync.add(new Packet("backspace", position));
     }
     
+    public void sendBackspace(int start, int end) {
+        sync.add(new Packet("backspaceMultiple", start + ":" + end));
+    }
+    
     public void sendText(String s, int position) {
         sync.add(new Packet("paste", position + ":" + s));
     }
@@ -68,6 +72,12 @@ public abstract class Sendable {
                 
             case "backspace":
                 ep.deleteChar(Integer.parseInt(val));
+                break;
+                
+            case "backspaceMultiple":
+                int start = Integer.parseInt(val.substring(0, val.indexOf(":")));
+                int end = Integer.parseInt(val.substring(val.indexOf(":") + 1, val.length()));
+                ep.deleteSelection(start, end);
                 break;
             
             case "paste":
